@@ -434,10 +434,11 @@ function MockupFeedback() {
       
       <button 
         onClick={() => setOpen(!open)}
-        className="w-12 h-12 rounded-full gradient-primary text-primary-foreground shadow-elegant hover:shadow-glow transition-smooth grid place-items-center pointer-events-auto group"
+        className="flex items-center gap-2 px-5 py-3.5 rounded-full gradient-primary text-primary-foreground shadow-elegant hover:shadow-glow transition-smooth pointer-events-auto group font-bold"
         aria-label="Leave feedback"
       >
         <MessageSquarePlus className="w-5 h-5 group-hover:scale-110 transition-smooth" />
+        <span className="text-sm">Review this Mockup</span>
       </button>
     </div>
   );
