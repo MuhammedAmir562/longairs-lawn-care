@@ -262,6 +262,21 @@ const faqs = [
   },
 ];
 
+/* ---------- Google reviews ---------- */
+// Swap these two URLs once you have your Google Business Profile link.
+// Find them here: https://www.google.com/business → "Get more reviews"
+const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=Longair%27s+Lawn+Care+%26+Garden+Services+Newmilns";
+const GOOGLE_LEAVE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID";
+
+const gallery = [
+  { src: gallery1, alt: "Freshly mowed striped lawn in an Ayrshire back garden", caption: "Lawn care · Newmilns", span: "" },
+  { src: gallery2, alt: "Tall conifer hedge trimmed to crisp lines", caption: "Hedge trimming · Kilmarnock", span: "row-span-2" },
+  { src: gallery3, alt: "Pressure washed sandstone patio next to a tidy lawn", caption: "Patio restoration · Galston", span: "" },
+  { src: gallery4, alt: "Restored cottage garden with mulched borders and flower beds", caption: "Garden transformation · Darvel", span: "row-span-2" },
+  { src: gallery5, alt: "Gardener mowing a large lush green lawn", caption: "Weekly maintenance · Stewarton", span: "" },
+  { src: gallery6, alt: "Sculpted topiary in a Scottish stone house front garden", caption: "Topiary & shaping · Newton Mearns", span: "" },
+];
+
 function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
@@ -270,6 +285,7 @@ function Index() {
       <LogoStrip />
       <About />
       <Services />
+      <Gallery />
       <Stats />
       <WhyUs />
       <Process />
