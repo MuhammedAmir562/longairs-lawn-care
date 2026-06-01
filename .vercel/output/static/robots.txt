@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://longairslawncare.co.uk/sitemap.xml
