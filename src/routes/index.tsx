@@ -1212,6 +1212,7 @@ function Footer() {
             <div className="text-sm font-semibold mb-3">Explore</div>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><a href="#services" className="hover:text-primary transition-smooth">Services</a></li>
+              <li><a href="#gallery" className="hover:text-primary transition-smooth">Our Work</a></li>
               <li><a href="#reviews" className="hover:text-primary transition-smooth">Reviews</a></li>
               <li><a href="#areas" className="hover:text-primary transition-smooth">Service Areas</a></li>
               <li><a href="#faq" className="hover:text-primary transition-smooth">FAQ</a></li>
