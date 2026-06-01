@@ -322,6 +322,7 @@ function Nav() {
 
   const links = [
     { href: "#services", label: "Services" },
+    { href: "#gallery", label: "Our Work" },
     { href: "#why", label: "Why us" },
     { href: "#reviews", label: "Reviews" },
     { href: "#areas", label: "Areas" },
