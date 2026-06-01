@@ -16,6 +16,7 @@ import {
   ThumbsUp,
   Menu,
   X,
+  MessageSquarePlus,
   MessageCircle,
   Quote,
   ChevronDown,
@@ -41,6 +42,7 @@ import beforeLawn from "@/assets/before-lawn.png";
 import afterLawn from "@/assets/after-lawn.png";
 import { BeforeAfterSlider } from "@/components/ui/BeforeAfterSlider";
 import { useReveal } from "@/hooks/use-reveal";
+import posthog from "posthog-js";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -268,8 +270,8 @@ const faqs = [
 /* ---------- Google reviews ---------- */
 // Swap these two URLs once you have your Google Business Profile link.
 // Find them here: https://www.google.com/business → "Get more reviews"
-const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=Longair%27s+Lawn+Care+%26+Garden+Services+Newmilns";
-const GOOGLE_LEAVE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID";
+const GOOGLE_REVIEWS_URL = "#";
+const GOOGLE_LEAVE_REVIEW_URL = "#";
 
 const gallery = [
   { src: gallery1, alt: "Freshly mowed striped lawn in an Ayrshire back garden", caption: "Lawn care · Newmilns", span: "" },
@@ -300,6 +302,7 @@ function Index() {
       <FloatingCTA />
       <DemoBadge />
       <FirstTimePopup />
+      <MockupFeedback />
       <StickyMobileCTA />
     </div>
   );
@@ -364,6 +367,78 @@ function FirstTimePopup() {
           Got it, let's explore
         </button>
       </div>
+    </div>
+  );
+}
+
+
+function MockupFeedback() {
+  const [open, setOpen] = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!feedback.trim()) return;
+    
+    posthog.capture("mockup_feedback", {
+      feedback: feedback
+    });
+    
+    setSubmitted(true);
+    setTimeout(() => {
+      setOpen(false);
+      setSubmitted(false);
+      setFeedback("");
+    }, 3000);
+  };
+
+  return (
+    <div className="fixed top-1/2 -translate-y-1/2 right-4 sm:right-6 z-[60] flex flex-col items-end pointer-events-none">
+      {open && (
+        <div className="bg-background/95 backdrop-blur-md border border-border p-4 rounded-2xl shadow-elegant w-[280px] sm:w-[320px] mb-4 animate-fade-up pointer-events-auto origin-right">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="font-semibold text-sm flex items-center gap-2">
+              <MessageSquarePlus className="w-4 h-4 text-primary" />
+              Mockup Feedback
+            </h3>
+            <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          
+          {submitted ? (
+            <div className="text-sm text-center py-6 text-primary font-medium flex flex-col items-center gap-2">
+              <Check className="w-6 h-6" />
+              Feedback sent to PostHog!
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <textarea 
+                value={feedback}
+                onChange={(e) => setFeedback(e.target.value)}
+                placeholder="What do you think of this mockup?"
+                className="w-full h-24 rounded-xl border border-input bg-background/50 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none placeholder:text-muted-foreground/50"
+                required
+              />
+              <button 
+                type="submit"
+                className="w-full rounded-xl gradient-primary text-primary-foreground py-2 text-sm font-medium shadow-soft hover:shadow-glow transition-smooth"
+              >
+                Send Feedback
+              </button>
+            </form>
+          )}
+        </div>
+      )}
+      
+      <button 
+        onClick={() => setOpen(!open)}
+        className="w-12 h-12 rounded-full gradient-primary text-primary-foreground shadow-elegant hover:shadow-glow transition-smooth grid place-items-center pointer-events-auto group"
+        aria-label="Leave feedback"
+      >
+        <MessageSquarePlus className="w-5 h-5 group-hover:scale-110 transition-smooth" />
+      </button>
     </div>
   );
 }
