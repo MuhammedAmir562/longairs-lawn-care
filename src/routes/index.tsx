@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   Leaf,
   Scissors,
@@ -14,12 +14,22 @@ import {
   Clock,
   Shield,
   ThumbsUp,
+  Menu,
+  X,
+  MessageCircle,
+  Quote,
+  ChevronDown,
+  Sparkles,
+  Calendar,
+  Award,
+  Facebook,
 } from "lucide-react";
 import heroLawn from "@/assets/hero-lawn.jpg";
 import serviceLawn from "@/assets/service-lawn.jpg";
 import serviceHedge from "@/assets/service-hedge.jpg";
 import serviceGarden from "@/assets/service-garden.jpg";
 import servicePatio from "@/assets/service-patio.jpg";
+import { useReveal } from "@/hooks/use-reveal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,34 +41,44 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Professional lawn care, hedge trimming, and garden services across Newmilns, North, East & South Ayrshire and East Renfrewshire. 90% recommended. Get your free quote today.",
+          "Professional lawn care, hedge trimming and garden services across Newmilns, North, East & South Ayrshire and East Renfrewshire. 90% recommended — free quotes within 24 hours.",
       },
       {
         name: "keywords",
         content:
-          "lawn care Ayrshire, gardeners Newmilns, hedge trimming Kilmarnock, garden maintenance East Ayrshire, grass cutting North Ayrshire",
+          "lawn care Ayrshire, gardeners Newmilns, hedge trimming Kilmarnock, garden maintenance East Ayrshire, grass cutting North Ayrshire, gardener Ayr, scarifying, pressure washing Ayrshire",
       },
+      { name: "theme-color", content: "#1d4d2b" },
       { property: "og:title", content: "Longair's Lawn Care & Garden Services" },
       {
         property: "og:description",
         content:
-          "Ayrshire's trusted local gardeners. Lawn care, hedge trimming and garden transformations. 90% recommended.",
+          "Ayrshire's trusted local gardeners. Lawn care, hedge trimming and full garden transformations.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
       { property: "og:image", content: heroLawn },
+      { property: "og:locale", content: "en_GB" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Longair's Lawn Care & Garden Services" },
+      { name: "twitter:image", content: heroLawn },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [
+      { rel: "canonical", href: "/" },
+      { rel: "preload", as: "image", href: heroLawn, fetchpriority: "high" },
+    ],
     scripts: [
       {
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "LocalBusiness",
+          "@id": "/#business",
           name: "Longair's Lawn Care & Garden Services",
           image: heroLawn,
           telephone: "+447541216111",
           email: "longairslawncare@gmail.com",
+          priceRange: "££",
           address: {
             "@type": "PostalAddress",
             addressLocality: "Newmilns",
@@ -67,14 +87,26 @@ export const Route = createFileRoute("/")({
           },
           areaServed: [
             "Newmilns",
+            "Kilmarnock",
+            "Galston",
+            "Darvel",
+            "Stewarton",
+            "Irvine",
+            "Kilwinning",
+            "Ayr",
+            "Prestwick",
+            "Troon",
+            "Newton Mearns",
+            "Giffnock",
             "North Ayrshire",
             "East Ayrshire",
             "South Ayrshire",
             "East Renfrewshire",
           ],
+          sameAs: ["https://www.facebook.com/LongairsLawnCare/"],
           aggregateRating: {
             "@type": "AggregateRating",
-            ratingValue: "4.8",
+            ratingValue: "4.9",
             reviewCount: "17",
           },
           url: "/",
@@ -89,27 +121,42 @@ const services = [
   {
     icon: Sprout,
     title: "Lawn Care & Grass Cutting",
-    desc: "Regular mowing, edging and striping for a pristine, healthy lawn all season.",
+    desc: "Regular mowing, edging, feeds and treatments for a striped, healthy lawn that's the envy of the street.",
     image: serviceLawn,
+    tags: ["Mowing", "Edging", "Feeds"],
   },
   {
     icon: Scissors,
-    title: "Hedge Trimming & Shaping",
-    desc: "Crisp lines, balanced shapes and tidy finishes — get your hedges winter-ready.",
+    title: "Hedge Trimming & Pruning",
+    desc: "Crisp lines, balanced shapes and tidy finishes — keep your hedges winter-ready and sharp year round.",
     image: serviceHedge,
+    tags: ["Trimming", "Shaping", "Pruning"],
   },
   {
     icon: Leaf,
     title: "Garden Maintenance",
-    desc: "Weeding, planting, mulching and seasonal tidy-ups to keep your garden flourishing.",
+    desc: "Weeding, planting, mulching, leaf clearing and seasonal tidy-ups to keep every corner flourishing.",
     image: serviceGarden,
+    tags: ["Weeding", "Planting", "Tidy-ups"],
   },
   {
     icon: Trees,
-    title: "Patio & Hard Landscaping",
-    desc: "Pressure washing, path clearance and full garden transformations from the ground up.",
+    title: "Patio & Transformations",
+    desc: "Pressure washing, re-sanding and full garden makeovers — we'll turn the jungle back into a paradise.",
     image: servicePatio,
+    tags: ["Pressure wash", "Re-sanding", "Makeovers"],
   },
+];
+
+const extras = [
+  "Scarifying & Aerating",
+  "Weed & Moss Control",
+  "Mare's Tail Eradication",
+  "Lawn Feeds & Treatments",
+  "Leaf Clearing",
+  "Pressure Washing",
+  "Re-Sanding",
+  "Turfing",
 ];
 
 const areas = [
@@ -128,104 +175,379 @@ const areas = [
 ];
 
 const trustPoints = [
-  { icon: ThumbsUp, label: "90% Recommended", sub: "From 17+ verified reviews" },
-  { icon: Shield, label: "Fully Insured", sub: "Complete peace of mind" },
-  { icon: Clock, label: "Reliable & Punctual", sub: "On time, every time" },
+  { icon: ThumbsUp, label: "90% Recommended", sub: "Verified reviews" },
+  { icon: Shield, label: "Fully Insured", sub: "Peace of mind" },
+  { icon: Clock, label: "Reliable", sub: "On time, every time" },
+];
+
+const stats = [
+  { value: "10+", label: "Years caring for gardens" },
+  { value: "500+", label: "Happy Ayrshire homes" },
+  { value: "4.9★", label: "Average client rating" },
+  { value: "24h", label: "Quote turnaround" },
+];
+
+const process = [
+  {
+    step: "01",
+    icon: MessageCircle,
+    title: "Get in touch",
+    desc: "Drop us a message, call or fill in the quote form — whichever's easiest for you.",
+  },
+  {
+    step: "02",
+    icon: Calendar,
+    title: "Free site visit",
+    desc: "We'll pop round at a time that suits, walk the garden with you and write up an honest quote.",
+  },
+  {
+    step: "03",
+    icon: Sparkles,
+    title: "Beautiful results",
+    desc: "Our friendly team gets to work — leaving your garden looking better than ever before.",
+  },
+];
+
+const testimonials = [
+  {
+    name: "Yvie Holland",
+    date: "26 Jul 2024",
+    text: "Can't say enough good things about Longairs! Communication is fantastic, pricing is reasonable and transparent, the quality of work is top class…and they are genuinely lovely helpful people to deal with! So chuffed to have found such a reliable, hard working company to take care of my garden.",
+  },
+  {
+    name: "James O'Neil",
+    date: "15 Aug 2022",
+    text: "Five other gardeners had let me down previously and the garden was like a jungle (literally). Sandra was great at keeping me updated. They did a fantastic job and I highly recommend anyone in the East Ayrshire region to make Longair's their first point of contact.",
+  },
+  {
+    name: "Jill Newbigging",
+    date: "2 May 2024",
+    text: "Fantastic customer service. Highly recommend Arthur and his team. Competitive pricing and great attention to detail.",
+  },
+  {
+    name: "Lynn Brown",
+    date: "20 Jun 2024",
+    text: "Great job done and great communication from Sandra. Will definitely use them again.",
+  },
+];
+
+const faqs = [
+  {
+    q: "Which areas do you cover?",
+    a: "We're based in Newmilns and cover the whole of East, North & South Ayrshire and East Renfrewshire — including Kilmarnock, Galston, Darvel, Stewarton, Irvine, Ayr, Troon, Newton Mearns and Giffnock. Just ask if you're nearby.",
+  },
+  {
+    q: "How much does it cost?",
+    a: "Every garden is different, so we always offer free, no-obligation quotes after a quick visit. Our pricing is fair, transparent and there are no surprises.",
+  },
+  {
+    q: "Are you insured?",
+    a: "Yes — we're fully insured and DBS-conscious, so you can have complete peace of mind whenever we're on your property.",
+  },
+  {
+    q: "Do you offer one-off jobs or just regular maintenance?",
+    a: "Both. From a single tidy-up or full transformation through to weekly / fortnightly / monthly maintenance plans — we'll work to a schedule that suits you.",
+  },
+  {
+    q: "How quickly can you start?",
+    a: "We typically reply to enquiries within 24 hours and can often book a free site visit within the same week, depending on the season.",
+  },
 ];
 
 function Index() {
-  const [submitted, setSubmitted] = useState(false);
+  return (
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <Nav />
+      <Hero />
+      <LogoStrip />
+      <About />
+      <Services />
+      <Stats />
+      <WhyUs />
+      <Process />
+      <Testimonials />
+      <Areas />
+      <Faq />
+      <QuoteSection />
+      <Footer />
+      <FloatingCTA />
+      <StickyMobileCTA />
+    </div>
+  );
+}
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
+/* ---------- Sections ---------- */
+
+function Nav() {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 12);
+    handler();
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  const links = [
+    { href: "#services", label: "Services" },
+    { href: "#why", label: "Why us" },
+    { href: "#reviews", label: "Reviews" },
+    { href: "#areas", label: "Areas" },
+    { href: "#faq", label: "FAQ" },
+  ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Nav */}
-      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/70 border-b border-border/50">
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-smooth ${
+          scrolled
+            ? "backdrop-blur-xl bg-background/85 border-b border-border/60 shadow-soft"
+            : "bg-transparent"
+        }`}
+      >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <a href="#top" className="flex items-center gap-2 font-semibold">
-            <span className="w-9 h-9 rounded-full gradient-primary grid place-items-center shadow-glow">
+          <a href="#top" className="flex items-center gap-2.5 font-semibold group">
+            <span className="w-9 h-9 rounded-xl gradient-primary grid place-items-center shadow-glow group-hover:scale-110 transition-smooth">
               <Leaf className="w-4 h-4 text-primary-foreground" />
             </span>
-            <span className="text-base sm:text-lg tracking-tight">Longair's</span>
+            <span
+              className={`text-base sm:text-lg tracking-tight transition-smooth ${
+                scrolled ? "text-foreground" : "text-cream"
+              }`}
+            >
+              Longair's
+            </span>
           </a>
-          <a
-            href="tel:+447541216111"
-            className="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-smooth"
-          >
-            <Phone className="w-4 h-4" /> 07541 216111
-          </a>
-          <a
-            href="#quote"
-            className="inline-flex items-center gap-1.5 rounded-full gradient-primary text-primary-foreground px-4 py-2 text-sm font-medium shadow-soft hover:shadow-glow transition-smooth"
-          >
-            Free Quote <ArrowRight className="w-3.5 h-3.5" />
-          </a>
+
+          <div className="hidden lg:flex items-center gap-1">
+            {links.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className={`px-4 py-2 text-sm font-medium rounded-full transition-smooth ${
+                  scrolled
+                    ? "text-foreground/80 hover:text-primary hover:bg-secondary"
+                    : "text-cream/85 hover:text-cream hover:bg-cream/10"
+                }`}
+              >
+                {l.label}
+              </a>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2">
+            <a
+              href="tel:+447541216111"
+              className={`hidden sm:inline-flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-full transition-smooth ${
+                scrolled ? "text-foreground hover:text-primary" : "text-cream hover:bg-cream/10"
+              }`}
+              aria-label="Call Longair's Lawn Care"
+            >
+              <Phone className="w-4 h-4" /> 07541 216111
+            </a>
+            <a
+              href="#quote"
+              className="hidden sm:inline-flex items-center gap-1.5 rounded-full gradient-primary text-primary-foreground px-4 py-2 text-sm font-medium shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-smooth"
+            >
+              Free Quote <ArrowRight className="w-3.5 h-3.5" />
+            </a>
+            <button
+              onClick={() => setOpen(true)}
+              className={`lg:hidden grid place-items-center w-11 h-11 rounded-full transition-smooth ${
+                scrolled
+                  ? "bg-secondary text-foreground hover:bg-secondary/80"
+                  : "bg-cream/15 text-cream hover:bg-cream/25 backdrop-blur-md"
+              }`}
+              aria-label="Open menu"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+          </div>
         </nav>
       </header>
 
-      {/* Hero */}
-      <section id="top" className="relative min-h-[100svh] flex items-center pt-16 overflow-hidden">
-        <img
-          src={heroLawn}
-          alt="Pristine striped lawn maintained by Longair's Lawn Care in Ayrshire"
-          width={1920}
-          height={1080}
-          fetchPriority="high"
-          className="absolute inset-0 w-full h-full object-cover"
+      {/* Mobile drawer */}
+      <div
+        className={`fixed inset-0 z-[60] lg:hidden transition-smooth ${
+          open ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+        aria-hidden={!open}
+      >
+        <div
+          onClick={() => setOpen(false)}
+          className={`absolute inset-0 bg-foreground/40 backdrop-blur-sm transition-opacity duration-500 ${
+            open ? "opacity-100" : "opacity-0"
+          }`}
         />
-        <div className="absolute inset-0 gradient-hero" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 w-full">
-          <div className="max-w-2xl animate-fade-up">
-            <span className="inline-flex items-center gap-2 rounded-full bg-background/15 backdrop-blur-md border border-cream/20 px-3 py-1.5 text-xs font-medium text-cream">
-              <Star className="w-3.5 h-3.5 fill-cream" /> 90% Recommended in Ayrshire
-            </span>
-            <h1 className="mt-5 text-4xl sm:text-6xl lg:text-7xl font-semibold leading-[1.05] text-cream text-balance">
-              Beautiful gardens,{" "}
-              <span className="italic text-primary-glow">expertly cared for.</span>
-            </h1>
-            <p className="mt-5 text-base sm:text-lg text-cream/85 max-w-xl text-balance">
-              From a single grass cut to a full garden transformation, Longair's
-              Lawn Care & Garden Services is your trusted local team across
-              Newmilns and all of Ayrshire.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:items-center">
-              <a
-                href="#quote"
-                className="inline-flex items-center justify-center gap-2 rounded-full gradient-primary text-primary-foreground px-7 py-4 text-base font-medium shadow-elegant hover:shadow-glow hover:-translate-y-0.5 transition-smooth"
-              >
-                Get a Free Quote <ArrowRight className="w-4 h-4" />
-              </a>
-              <a
-                href="tel:+447541216111"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-cream/10 backdrop-blur-md border border-cream/30 text-cream px-7 py-4 text-base font-medium hover:bg-cream/20 transition-smooth"
-              >
-                <Phone className="w-4 h-4" /> Call 07541 216111
-              </a>
+        <aside
+          className={`absolute top-0 right-0 h-full w-[88%] max-w-sm bg-background shadow-elegant flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            open ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="flex items-center justify-between p-5 border-b border-border">
+            <div className="flex items-center gap-2.5 font-semibold">
+              <span className="w-9 h-9 rounded-xl gradient-primary grid place-items-center">
+                <Leaf className="w-4 h-4 text-primary-foreground" />
+              </span>
+              Longair's
             </div>
+            <button
+              onClick={() => setOpen(false)}
+              className="grid place-items-center w-11 h-11 rounded-full bg-secondary hover:bg-secondary/70 transition-smooth"
+              aria-label="Close menu"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          <nav className="flex-1 overflow-y-auto p-5 space-y-1">
+            {links.map((l, i) => (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                style={{ transitionDelay: `${i * 40}ms` }}
+                className={`flex items-center justify-between px-4 py-4 rounded-2xl text-lg font-medium hover:bg-secondary transition-smooth ${
+                  open ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
+                } duration-500`}
+              >
+                {l.label}
+                <ArrowRight className="w-4 h-4 text-primary" />
+              </a>
+            ))}
+          </nav>
+          <div className="p-5 border-t border-border space-y-3">
+            <a
+              href="tel:+447541216111"
+              className="flex items-center justify-center gap-2 w-full rounded-full bg-secondary text-foreground px-6 py-4 font-medium hover:bg-secondary/70 transition-smooth"
+            >
+              <Phone className="w-4 h-4" /> 07541 216111
+            </a>
+            <a
+              href="#quote"
+              onClick={() => setOpen(false)}
+              className="flex items-center justify-center gap-2 w-full rounded-full gradient-primary text-primary-foreground px-6 py-4 font-medium shadow-elegant"
+            >
+              Get a Free Quote <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </aside>
+      </div>
+    </>
+  );
+}
 
-            <div className="mt-10 grid grid-cols-3 gap-4 max-w-lg">
-              {trustPoints.map((t) => (
-                <div key={t.label} className="text-cream">
-                  <t.icon className="w-5 h-5 text-primary-glow mb-2" />
-                  <div className="text-sm font-semibold leading-tight">{t.label}</div>
-                  <div className="text-xs text-cream/70 mt-0.5 hidden sm:block">{t.sub}</div>
-                </div>
-              ))}
-            </div>
+function Hero() {
+  return (
+    <section id="top" className="relative min-h-[100svh] flex items-center pt-20 pb-12 overflow-hidden">
+      <img
+        src={heroLawn}
+        alt="Pristine striped lawn maintained by Longair's Lawn Care in Ayrshire"
+        width={1920}
+        height={1080}
+        fetchPriority="high"
+        className="absolute inset-0 w-full h-full object-cover scale-105"
+      />
+      <div className="absolute inset-0 gradient-hero" />
+      <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/80 via-transparent to-transparent" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-12 w-full">
+        <div className="max-w-2xl animate-fade-up">
+          <span className="inline-flex items-center gap-2 rounded-full bg-cream/10 backdrop-blur-md border border-cream/20 px-3 py-1.5 text-xs font-medium text-cream">
+            <Star className="w-3.5 h-3.5 fill-cream" /> 90% Recommended · Ayrshire
+          </span>
+          <h1 className="mt-5 text-[2.5rem] leading-[1.05] sm:text-6xl lg:text-7xl font-semibold text-cream text-balance">
+            Beautiful gardens,{" "}
+            <span className="italic text-primary-glow">expertly cared for.</span>
+          </h1>
+          <p className="mt-5 text-base sm:text-lg text-cream/85 max-w-xl text-balance">
+            From a single grass cut to a full garden transformation, Longair's
+            Lawn Care & Garden Services is your trusted local team across
+            Newmilns and all of Ayrshire.
+          </p>
+          <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:items-center">
+            <a
+              href="#quote"
+              className="group inline-flex items-center justify-center gap-2 rounded-full gradient-primary text-primary-foreground px-7 py-4 text-base font-medium shadow-elegant hover:shadow-glow hover:-translate-y-0.5 transition-smooth"
+            >
+              Get a Free Quote
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-smooth" />
+            </a>
+            <a
+              href="tel:+447541216111"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-cream/10 backdrop-blur-md border border-cream/30 text-cream px-7 py-4 text-base font-medium hover:bg-cream/20 transition-smooth"
+            >
+              <Phone className="w-4 h-4" /> 07541 216111
+            </a>
+          </div>
+
+          <div className="mt-10 grid grid-cols-3 gap-4 max-w-lg">
+            {trustPoints.map((t) => (
+              <div key={t.label} className="text-cream">
+                <t.icon className="w-5 h-5 text-primary-glow mb-2" />
+                <div className="text-sm font-semibold leading-tight">{t.label}</div>
+                <div className="text-xs text-cream/70 mt-0.5 hidden sm:block">{t.sub}</div>
+              </div>
+            ))}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Intro */}
+      {/* Scroll cue */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream/60 float-slow hidden sm:flex flex-col items-center gap-1.5">
+        <span className="text-[10px] tracking-[0.3em] uppercase">Scroll</span>
+        <ChevronDown className="w-4 h-4" />
+      </div>
+    </section>
+  );
+}
+
+function LogoStrip() {
+  const items = [
+    "Newmilns",
+    "Kilmarnock",
+    "Galston",
+    "Darvel",
+    "Stewarton",
+    "Irvine",
+    "Ayr",
+    "Troon",
+    "Prestwick",
+    "Newton Mearns",
+    "Giffnock",
+  ];
+  const doubled = [...items, ...items];
+  return (
+    <section
+      className="py-6 border-y border-border bg-secondary/40 overflow-hidden"
+      aria-label="Areas served"
+    >
+      <div className="flex whitespace-nowrap marquee">
+        {doubled.map((i, idx) => (
+          <div key={idx} className="flex items-center gap-3 px-6 text-muted-foreground">
+            <MapPin className="w-3.5 h-3.5 text-primary" />
+            <span className="text-sm font-medium">{i}</span>
+            <span className="text-primary/40">•</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function About() {
+  return (
+    <Reveal>
       <section className="py-20 sm:py-28 gradient-soft">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          <span className="text-xs font-semibold tracking-[0.2em] uppercase text-primary">
-            About Longair's
-          </span>
+          <Eyebrow>About Longair's</Eyebrow>
           <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance">
             Ayrshire's local gardening team — proudly family-run.
           </h2>
@@ -238,24 +560,30 @@ function Index() {
           </p>
         </div>
       </section>
+    </Reveal>
+  );
+}
 
-      {/* Services */}
-      <section id="services" className="py-20 sm:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+function Services() {
+  return (
+    <section id="services" className="py-20 sm:py-28">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <Reveal>
           <div className="max-w-2xl">
-            <span className="text-xs font-semibold tracking-[0.2em] uppercase text-primary">
-              Our Services
-            </span>
+            <Eyebrow>Our Services</Eyebrow>
             <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance">
               Everything your garden needs, in one trusted team.
             </h2>
+            <p className="mt-4 text-muted-foreground max-w-xl">
+              Pick a one-off job or a regular maintenance plan — we'll tailor it to your garden.
+            </p>
           </div>
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {services.map((s) => (
-              <article
-                key={s.title}
-                className="group relative overflow-hidden rounded-3xl bg-card shadow-soft hover:shadow-elegant transition-smooth"
-              >
+        </Reveal>
+
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {services.map((s, i) => (
+            <Reveal key={s.title} delay={i * 80}>
+              <article className="group relative overflow-hidden rounded-3xl bg-card shadow-soft hover:shadow-elegant hover:-translate-y-1 transition-smooth h-full">
                 <div className="aspect-[16/10] overflow-hidden">
                   <img
                     src={s.image}
@@ -263,32 +591,43 @@ function Index() {
                     width={800}
                     height={500}
                     loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-smooth duration-700"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-smooth duration-[1200ms]"
                   />
                 </div>
                 <div className="p-6 sm:p-8">
                   <div className="flex items-start gap-4">
-                    <span className="shrink-0 w-11 h-11 rounded-2xl bg-secondary grid place-items-center text-primary">
+                    <span className="shrink-0 w-11 h-11 rounded-2xl bg-secondary grid place-items-center text-primary group-hover:gradient-primary group-hover:text-primary-foreground transition-smooth">
                       <s.icon className="w-5 h-5" />
                     </span>
-                    <div>
+                    <div className="flex-1">
                       <h3 className="text-xl font-semibold">{s.title}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                        {s.desc}
-                      </p>
+                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
+                      <div className="mt-4 flex flex-wrap gap-1.5">
+                        {s.tags.map((t) => (
+                          <span key={t} className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-secondary text-secondary-foreground">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
               </article>
-            ))}
-          </div>
+            </Reveal>
+          ))}
+        </div>
 
+        <Reveal>
           <div className="mt-10 rounded-3xl border border-border bg-secondary/50 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
             <div className="flex-1">
               <h3 className="text-lg font-semibold">Also offering specialised work</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Scarifying · Moss treatment · Mare's tail eradication · Weed control · Seasonal clean-ups · Turfing
-              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {extras.map((e) => (
+                  <span key={e} className="text-xs font-medium px-3 py-1.5 rounded-full bg-background border border-border text-foreground/80">
+                    {e}
+                  </span>
+                ))}
+              </div>
             </div>
             <a
               href="#quote"
@@ -297,141 +636,288 @@ function Index() {
               Ask About Your Job <ArrowRight className="w-4 h-4" />
             </a>
           </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Stats() {
+  return (
+    <Reveal>
+      <section className="py-16 bg-forest-deep text-cream relative overflow-hidden">
+        <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_top_left,oklch(0.62_0.16_142),transparent_55%)]" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+          {stats.map((s) => (
+            <div key={s.label} className="text-center">
+              <div className="text-4xl sm:text-5xl font-semibold text-primary-glow tracking-tight">{s.value}</div>
+              <div className="mt-1.5 text-xs sm:text-sm text-cream/70 leading-tight">{s.label}</div>
+            </div>
+          ))}
         </div>
       </section>
+    </Reveal>
+  );
+}
 
-      {/* Why us */}
-      <section className="py-20 sm:py-28 bg-forest-deep text-cream relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,oklch(0.62_0.16_142),transparent_60%)]" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+function WhyUs() {
+  return (
+    <section id="why" className="py-20 sm:py-28">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <Reveal>
             <div>
-              <span className="text-xs font-semibold tracking-[0.2em] uppercase text-primary-glow">
-                Why Longair's
-              </span>
+              <Eyebrow>Why Longair's</Eyebrow>
               <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance">
                 Local craft. Honest pricing. Stunning results.
               </h2>
-              <p className="mt-5 text-cream/80 text-balance">
+              <p className="mt-5 text-muted-foreground text-balance">
                 We've built our reputation across Ayrshire one tidy garden at a
                 time. Whether you need a one-off transformation or year-round
                 maintenance, we treat every job with the same level of care.
               </p>
+              <a
+                href="#quote"
+                className="mt-8 inline-flex items-center gap-2 rounded-full gradient-primary text-primary-foreground px-6 py-3 font-medium shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-smooth"
+              >
+                Start with a free quote <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
-            <ul className="space-y-4">
-              {[
-                "Free, no-obligation quotes — straight to your inbox",
-                "Family-run business, established and locally trusted",
-                "Fully insured with professional, well-kept equipment",
-                "Friendly, reliable team that turns up when we say we will",
-                "Before & after photos with every major project",
-              ].map((point) => (
-                <li
-                  key={point}
-                  className="flex items-start gap-3 rounded-2xl bg-cream/5 border border-cream/10 p-4 backdrop-blur-sm"
-                >
+          </Reveal>
+          <ul className="space-y-3">
+            {[
+              "Free, no-obligation quotes — straight to your inbox",
+              "Family-run business, established and locally trusted",
+              "Fully insured with professional, well-kept equipment",
+              "Friendly, reliable team that turns up when we say we will",
+              "Before & after photos with every major project",
+            ].map((point, i) => (
+              <Reveal key={point} delay={i * 70}>
+                <li className="flex items-start gap-3 rounded-2xl bg-card border border-border p-4 hover:border-primary/40 hover:shadow-soft transition-smooth">
                   <span className="shrink-0 w-6 h-6 rounded-full gradient-primary grid place-items-center mt-0.5">
                     <Check className="w-3.5 h-3.5 text-primary-foreground" strokeWidth={3} />
                   </span>
-                  <span className="text-sm sm:text-base text-cream/95">{point}</span>
+                  <span className="text-sm sm:text-base">{point}</span>
                 </li>
-              ))}
-            </ul>
-          </div>
+              </Reveal>
+            ))}
+          </ul>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      {/* Service areas */}
-      <section id="areas" className="py-20 sm:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+function Process() {
+  return (
+    <section className="py-20 sm:py-28 gradient-soft">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <Reveal>
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-semibold tracking-[0.2em] uppercase text-primary">
-              Service Areas
-            </span>
+            <Eyebrow>How it works</Eyebrow>
+            <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance">
+              Easy from first call to final cut.
+            </h2>
+          </div>
+        </Reveal>
+        <div className="mt-12 grid md:grid-cols-3 gap-5">
+          {process.map((p, i) => (
+            <Reveal key={p.step} delay={i * 100}>
+              <div className="relative h-full rounded-3xl bg-card border border-border p-7 hover:border-primary/40 hover:-translate-y-1 hover:shadow-elegant transition-smooth">
+                <div className="absolute -top-3 -right-3 w-12 h-12 rounded-2xl gradient-primary text-primary-foreground grid place-items-center font-semibold text-sm shadow-glow">
+                  {p.step}
+                </div>
+                <span className="inline-grid place-items-center w-12 h-12 rounded-2xl bg-secondary text-primary mb-5">
+                  <p.icon className="w-5 h-5" />
+                </span>
+                <h3 className="text-xl font-semibold">{p.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Testimonials() {
+  return (
+    <section id="reviews" className="py-20 sm:py-28">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <Reveal>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
+            <div>
+              <Eyebrow>Kind words</Eyebrow>
+              <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance max-w-xl">
+                Loved by gardens (and their owners) across Ayrshire.
+              </h2>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Star key={i} className="w-4 h-4 fill-primary-glow text-primary-glow" />
+                ))}
+              </div>
+              <span className="font-medium text-foreground">4.9 / 5</span>
+              <span>· 17 reviews</span>
+            </div>
+          </div>
+        </Reveal>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {testimonials.map((t, i) => (
+            <Reveal key={t.name} delay={i * 80}>
+              <figure className="relative h-full rounded-3xl bg-card border border-border p-6 hover:shadow-elegant hover:-translate-y-1 transition-smooth flex flex-col">
+                <Quote className="w-7 h-7 text-primary-glow mb-3" />
+                <blockquote className="text-sm text-foreground/85 leading-relaxed flex-1">
+                  "{t.text}"
+                </blockquote>
+                <figcaption className="mt-5 pt-5 border-t border-border">
+                  <div className="font-semibold text-sm">{t.name}</div>
+                  <div className="text-xs text-muted-foreground mt-0.5">{t.date}</div>
+                  <div className="flex mt-2">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-primary-glow text-primary-glow" />
+                    ))}
+                  </div>
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Areas() {
+  return (
+    <section id="areas" className="py-20 sm:py-28 gradient-soft">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <Reveal>
+          <div className="text-center max-w-2xl mx-auto">
+            <Eyebrow>Service Areas</Eyebrow>
             <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance">
               Proudly serving Ayrshire & East Renfrewshire
             </h2>
             <p className="mt-5 text-muted-foreground">
-              Based in Newmilns and covering towns and villages right across
-              the region. If you're nearby, we can help.
+              Based in Newmilns and covering towns and villages right across the region.
             </p>
           </div>
-
-          <div className="mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            {areas.map((a) => (
-              <div
-                key={a.name}
-                className="group rounded-2xl border border-border bg-card p-5 hover:border-primary/40 hover:-translate-y-0.5 transition-smooth"
-              >
-                <MapPin className="w-4 h-4 text-primary mb-3" />
+        </Reveal>
+        <div className="mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+          {areas.map((a, i) => (
+            <Reveal key={a.name} delay={i * 35}>
+              <div className="group rounded-2xl border border-border bg-card p-5 hover:border-primary/40 hover:-translate-y-0.5 hover:shadow-soft transition-smooth h-full">
+                <MapPin className="w-4 h-4 text-primary mb-3 group-hover:scale-125 transition-smooth" />
                 <div className="font-semibold">{a.name}</div>
                 <div className="text-xs text-muted-foreground mt-1">{a.note}</div>
               </div>
-            ))}
-          </div>
-
-          <p className="mt-10 text-center text-sm text-muted-foreground">
-            Don't see your area? <a href="#quote" className="text-primary font-medium underline-offset-4 hover:underline">Get in touch</a> — chances are we cover it.
-          </p>
+            </Reveal>
+          ))}
         </div>
-      </section>
+        <p className="mt-10 text-center text-sm text-muted-foreground">
+          Don't see your area?{" "}
+          <a href="#quote" className="text-primary font-medium underline-offset-4 hover:underline">
+            Get in touch
+          </a>{" "}
+          — chances are we cover it.
+        </p>
+      </div>
+    </section>
+  );
+}
 
-      {/* Quote form */}
-      <section id="quote" className="py-20 sm:py-28 gradient-soft">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-5 gap-10 lg:gap-16 items-start">
+function Faq() {
+  const [open, setOpen] = useState<number | null>(0);
+  return (
+    <section id="faq" className="py-20 sm:py-28">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6">
+        <Reveal>
+          <div className="text-center mb-12">
+            <Eyebrow>FAQ</Eyebrow>
+            <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance">
+              Questions, answered.
+            </h2>
+          </div>
+        </Reveal>
+        <div className="space-y-3">
+          {faqs.map((f, i) => (
+            <Reveal key={f.q} delay={i * 50}>
+              <div className="rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/30 transition-smooth">
+                <button
+                  onClick={() => setOpen(open === i ? null : i)}
+                  aria-expanded={open === i}
+                  className="w-full flex items-center justify-between gap-4 text-left px-5 sm:px-6 py-5 font-medium"
+                >
+                  <span className="text-base sm:text-lg">{f.q}</span>
+                  <ChevronDown
+                    className={`w-5 h-5 shrink-0 text-primary transition-smooth ${
+                      open === i ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                <div
+                  className={`grid transition-all duration-500 ease-out ${
+                    open === i ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <p className="px-5 sm:px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
+                      {f.a}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function QuoteSection() {
+  const [submitted, setSubmitted] = useState(false);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+  return (
+    <section id="quote" className="py-20 sm:py-28 bg-forest-deep text-cream relative overflow-hidden">
+      <div className="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_top_right,oklch(0.62_0.16_142),transparent_60%)]" />
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="grid lg:grid-cols-5 gap-10 lg:gap-16 items-start">
+          <Reveal>
             <div className="lg:col-span-2">
-              <span className="text-xs font-semibold tracking-[0.2em] uppercase text-primary">
+              <span className="text-xs font-semibold tracking-[0.2em] uppercase text-primary-glow">
                 Free Quote
               </span>
               <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance">
                 Let's get your garden looking its best.
               </h2>
-              <p className="mt-5 text-muted-foreground text-balance">
-                Tell us a little about the work you need and we'll get back to
-                you with a friendly, no-obligation quote — usually within 24
-                hours.
+              <p className="mt-5 text-cream/80 text-balance">
+                Tell us about the work and we'll get back to you with a friendly,
+                no-obligation quote — usually within 24 hours.
               </p>
-
-              <div className="mt-8 space-y-4">
-                <a href="tel:+447541216111" className="flex items-center gap-4 group">
-                  <span className="w-11 h-11 rounded-2xl bg-secondary grid place-items-center text-primary group-hover:gradient-primary group-hover:text-primary-foreground transition-smooth">
-                    <Phone className="w-5 h-5" />
-                  </span>
-                  <div>
-                    <div className="text-xs text-muted-foreground">Call us</div>
-                    <div className="font-semibold">07541 216111</div>
-                  </div>
-                </a>
-                <a href="mailto:longairslawncare@gmail.com" className="flex items-center gap-4 group">
-                  <span className="w-11 h-11 rounded-2xl bg-secondary grid place-items-center text-primary group-hover:gradient-primary group-hover:text-primary-foreground transition-smooth">
-                    <Mail className="w-5 h-5" />
-                  </span>
-                  <div>
-                    <div className="text-xs text-muted-foreground">Email us</div>
-                    <div className="font-semibold break-all">longairslawncare@gmail.com</div>
-                  </div>
-                </a>
-                <div className="flex items-center gap-4">
-                  <span className="w-11 h-11 rounded-2xl bg-secondary grid place-items-center text-primary">
-                    <MapPin className="w-5 h-5" />
-                  </span>
-                  <div>
-                    <div className="text-xs text-muted-foreground">Based in</div>
-                    <div className="font-semibold">Newmilns, Ayrshire</div>
-                  </div>
-                </div>
+              <div className="mt-8 space-y-3">
+                <ContactRow icon={Phone} label="Call us" value="07541 216111" href="tel:+447541216111" />
+                <ContactRow icon={Mail} label="Email us" value="longairslawncare@gmail.com" href="mailto:longairslawncare@gmail.com" />
+                <ContactRow icon={MapPin} label="Based in" value="Newmilns, Ayrshire" />
               </div>
             </div>
+          </Reveal>
 
+          <Reveal delay={100}>
             <div className="lg:col-span-3">
               <form
                 onSubmit={handleSubmit}
-                className="rounded-3xl bg-card shadow-elegant p-6 sm:p-10 border border-border"
+                className="rounded-3xl bg-background text-foreground shadow-elegant p-6 sm:p-10 border border-border"
               >
                 {submitted ? (
                   <div className="py-16 text-center">
-                    <span className="inline-grid place-items-center w-14 h-14 rounded-full gradient-primary mb-5">
+                    <span className="inline-grid place-items-center w-14 h-14 rounded-full gradient-primary mb-5 shadow-glow">
                       <Check className="w-6 h-6 text-primary-foreground" strokeWidth={3} />
                     </span>
                     <h3 className="text-2xl font-semibold">Thank you!</h3>
@@ -448,9 +934,7 @@ function Index() {
                       <Field label="Postcode / Town" name="postcode" required placeholder="KA16…" className="sm:col-span-2" />
                     </div>
                     <div className="mt-4">
-                      <label className="block text-sm font-medium mb-2">
-                        Service needed
-                      </label>
+                      <label className="block text-sm font-medium mb-2">Service needed</label>
                       <select
                         name="service"
                         required
@@ -461,15 +945,13 @@ function Index() {
                         <option>Lawn care / grass cutting</option>
                         <option>Hedge trimming</option>
                         <option>Garden maintenance</option>
-                        <option>Patio / hard landscaping</option>
+                        <option>Patio / pressure washing</option>
                         <option>Full garden transformation</option>
                         <option>Something else</option>
                       </select>
                     </div>
                     <div className="mt-4">
-                      <label className="block text-sm font-medium mb-2">
-                        Tell us about the job
-                      </label>
+                      <label className="block text-sm font-medium mb-2">Tell us about the job</label>
                       <textarea
                         name="message"
                         rows={4}
@@ -490,28 +972,164 @@ function Index() {
                 )}
               </form>
             </div>
-          </div>
+          </Reveal>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
-      {/* Footer */}
-      <footer className="bg-forest-deep text-cream/80 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row gap-6 justify-between items-start sm:items-center">
-          <div className="flex items-center gap-3">
-            <span className="w-9 h-9 rounded-full gradient-primary grid place-items-center">
-              <Leaf className="w-4 h-4 text-primary-foreground" />
-            </span>
-            <div>
-              <div className="font-semibold text-cream">Longair's Lawn Care & Garden Services</div>
-              <div className="text-xs text-cream/60">Newmilns · Ayrshire · East Renfrewshire</div>
+function Footer() {
+  return (
+    <footer className="bg-background border-t border-border py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="grid md:grid-cols-4 gap-8 mb-10">
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-2.5 font-semibold mb-3">
+              <span className="w-9 h-9 rounded-xl gradient-primary grid place-items-center">
+                <Leaf className="w-4 h-4 text-primary-foreground" />
+              </span>
+              Longair's Lawn Care & Garden Services
+            </div>
+            <p className="text-sm text-muted-foreground max-w-md">
+              Ayrshire's trusted local gardeners. Based in Newmilns and covering
+              the whole region — from quick tidy-ups to full garden transformations.
+            </p>
+            <div className="mt-4 flex items-center gap-2">
+              <a
+                href="https://www.facebook.com/LongairsLawnCare/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="w-10 h-10 grid place-items-center rounded-full bg-secondary hover:gradient-primary hover:text-primary-foreground transition-smooth"
+              >
+                <Facebook className="w-4 h-4" />
+              </a>
+              <a
+                href="mailto:longairslawncare@gmail.com"
+                aria-label="Email"
+                className="w-10 h-10 grid place-items-center rounded-full bg-secondary hover:gradient-primary hover:text-primary-foreground transition-smooth"
+              >
+                <Mail className="w-4 h-4" />
+              </a>
             </div>
           </div>
-          <div className="text-xs text-cream/60">
-            © {new Date().getFullYear()} Longair's Lawn Care. All rights reserved.
+          <div>
+            <div className="text-sm font-semibold mb-3">Explore</div>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><a href="#services" className="hover:text-primary transition-smooth">Services</a></li>
+              <li><a href="#reviews" className="hover:text-primary transition-smooth">Reviews</a></li>
+              <li><a href="#areas" className="hover:text-primary transition-smooth">Service Areas</a></li>
+              <li><a href="#faq" className="hover:text-primary transition-smooth">FAQ</a></li>
+              <li><a href="#quote" className="hover:text-primary transition-smooth">Free Quote</a></li>
+            </ul>
+          </div>
+          <div>
+            <div className="text-sm font-semibold mb-3">Contact</div>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><a href="tel:+447541216111" className="hover:text-primary transition-smooth">07541 216111</a></li>
+              <li><a href="mailto:longairslawncare@gmail.com" className="hover:text-primary transition-smooth break-all">longairslawncare@gmail.com</a></li>
+              <li>Newmilns, Ayrshire</li>
+            </ul>
           </div>
         </div>
-      </footer>
+        <div className="pt-8 border-t border-border flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center text-xs text-muted-foreground">
+          <div>© {new Date().getFullYear()} Longair's Lawn Care & Garden Services. All rights reserved.</div>
+          <div className="flex items-center gap-1.5">
+            <Award className="w-3.5 h-3.5 text-primary" /> 90% recommended in Ayrshire
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function FloatingCTA() {
+  return (
+    <a
+      href="https://wa.me/447541216111"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Message us on WhatsApp"
+      className="fixed bottom-24 sm:bottom-6 right-4 sm:right-6 z-40 w-14 h-14 rounded-full gradient-primary text-primary-foreground shadow-elegant grid place-items-center hover:scale-110 hover:shadow-glow transition-smooth float-slow"
+    >
+      <MessageCircle className="w-6 h-6" />
+    </a>
+  );
+}
+
+function StickyMobileCTA() {
+  return (
+    <div className="sm:hidden fixed bottom-0 inset-x-0 z-40 p-3 bg-background/95 backdrop-blur-xl border-t border-border shadow-elegant">
+      <div className="grid grid-cols-2 gap-2">
+        <a
+          href="tel:+447541216111"
+          className="inline-flex items-center justify-center gap-2 rounded-full bg-secondary text-foreground px-4 py-3 text-sm font-medium"
+        >
+          <Phone className="w-4 h-4" /> Call
+        </a>
+        <a
+          href="#quote"
+          className="inline-flex items-center justify-center gap-2 rounded-full gradient-primary text-primary-foreground px-4 py-3 text-sm font-medium shadow-soft"
+        >
+          Free Quote <ArrowRight className="w-4 h-4" />
+        </a>
+      </div>
     </div>
+  );
+}
+
+/* ---------- Primitives ---------- */
+
+function Eyebrow({ children }: { children: ReactNode }) {
+  return (
+    <span className="text-xs font-semibold tracking-[0.2em] uppercase text-primary">
+      {children}
+    </span>
+  );
+}
+
+function Reveal({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
+  const { ref, visible } = useReveal();
+  return (
+    <div
+      ref={ref}
+      className={`reveal ${visible ? "is-visible" : ""}`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function ContactRow({
+  icon: Icon,
+  label,
+  value,
+  href,
+}: {
+  icon: typeof Phone;
+  label: string;
+  value: string;
+  href?: string;
+}) {
+  const inner = (
+    <>
+      <span className="w-11 h-11 rounded-2xl bg-cream/10 border border-cream/15 grid place-items-center text-primary-glow group-hover:bg-cream/20 transition-smooth">
+        <Icon className="w-5 h-5" />
+      </span>
+      <div>
+        <div className="text-xs text-cream/60">{label}</div>
+        <div className="font-semibold break-all text-cream">{value}</div>
+      </div>
+    </>
+  );
+  return href ? (
+    <a href={href} className="flex items-center gap-4 group">
+      {inner}
+    </a>
+  ) : (
+    <div className="flex items-center gap-4">{inner}</div>
   );
 }
 
