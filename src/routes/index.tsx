@@ -811,6 +811,47 @@ function Testimonials() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal delay={120}>
+          <div className="mt-10 rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-soft flex flex-col sm:flex-row sm:items-center gap-6">
+            <div className="flex items-center gap-4 flex-1">
+              <span className="shrink-0 w-14 h-14 rounded-2xl bg-secondary grid place-items-center">
+                <GoogleG className="w-7 h-7" />
+              </span>
+              <div>
+                <div className="flex items-center gap-2">
+                  <div className="flex">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <Star key={i} className="w-4 h-4 fill-primary-glow text-primary-glow" />
+                    ))}
+                  </div>
+                  <span className="font-semibold text-sm">4.9 on Google</span>
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Real reviews from real customers across Ayrshire.
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <a
+                href={GOOGLE_REVIEWS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-secondary text-foreground px-5 py-3 text-sm font-medium hover:bg-secondary/70 transition-smooth"
+              >
+                Read all on Google <ArrowRight className="w-4 h-4" />
+              </a>
+              <a
+                href={GOOGLE_LEAVE_REVIEW_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full gradient-primary text-primary-foreground px-5 py-3 text-sm font-medium shadow-soft hover:shadow-glow transition-smooth"
+              >
+                Leave a review <Star className="w-4 h-4 fill-current" />
+              </a>
+            </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
