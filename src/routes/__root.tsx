@@ -9,8 +9,26 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/react";
+import posthog from "posthog-js";
+import { PostHogProvider } from "posthog-js/react";
 
 import appCss from "../styles.css?url";
+
+if (typeof window !== "undefined") {
+  posthog.init("phc_oy7rW2BwnfUrcRYCNKvAfshb5t65AedAvQGuNqt5pvHS", {
+    api_host: "https://us.i.posthog.com",
+    person_profiles: "always", // Helps with recordings and heatmaps
+  });
+
+  // Admin filter check
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("admin") === "1") {
+    posthog.identify("owner-admin", { role: "admin" });
+    localStorage.setItem("is_admin", "true");
+  } else if (localStorage.getItem("is_admin") === "true") {
+    posthog.identify("owner-admin", { role: "admin" });
+  }
+}
 
 function NotFoundComponent() {
   return (
@@ -121,9 +139,11 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
-    </QueryClientProvider>
+    <PostHogProvider client={posthog}>
+      <QueryClientProvider client={queryClient}>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </QueryClientProvider>
+    </PostHogProvider>
   );
 }

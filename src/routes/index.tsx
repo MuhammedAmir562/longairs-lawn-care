@@ -1208,7 +1208,7 @@ function Gallery() {
           <Reveal>
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
               <div>
-                <Eyebrow>Our Work</Eyebrow>
+                <Eyebrow className="text-primary-glow">Our Work</Eyebrow>
                 <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance text-cream">
                   Recent Projects
                 </h2>
@@ -1436,9 +1436,9 @@ function StickyMobileCTA() {
 
 /* ---------- Primitives ---------- */
 
-function Eyebrow({ children }: { children: ReactNode }) {
+function Eyebrow({ children, className = "text-primary" }: { children: ReactNode; className?: string }) {
   return (
-    <span className="text-xs font-semibold tracking-[0.2em] uppercase text-primary">
+    <span className={`text-xs font-semibold tracking-[0.2em] uppercase ${className}`}>
       {children}
     </span>
   );
