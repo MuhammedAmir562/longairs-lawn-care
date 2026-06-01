@@ -370,13 +370,13 @@ function FirstTimePopup() {
 
 function DemoBadge() {
   return (
-    <div className="fixed bottom-24 sm:bottom-6 left-4 sm:left-6 z-50 animate-fade-up pointer-events-none">
-      <div className="bg-background/85 backdrop-blur-md border border-border p-4 rounded-2xl shadow-elegant max-w-[220px] pointer-events-auto">
-        <div className="flex items-center gap-2 font-semibold text-primary mb-1">
-          <Sparkles className="w-4 h-4" /> Mockup Demo
+    <div className="fixed bottom-20 sm:bottom-6 left-3 sm:left-6 z-50 animate-fade-up pointer-events-none origin-bottom-left scale-85 sm:scale-100">
+      <div className="bg-background/85 backdrop-blur-md border border-border p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-elegant max-w-[180px] sm:max-w-[220px] pointer-events-auto">
+        <div className="flex items-center gap-1.5 sm:gap-2 font-semibold text-primary mb-1 text-[13px] sm:text-base">
+          <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Mockup Demo
         </div>
-        <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed">
-          This is a demonstration website built by <strong className="text-foreground">Muhammed Amir</strong> at <strong className="text-foreground">Vexbase</strong> to showcase modern web design.
+        <p className="text-[10px] sm:text-xs text-muted-foreground leading-relaxed">
+          This is a demonstration website built by <strong className="text-foreground">Muhammed Amir</strong> at <strong className="text-foreground">Vexbase</strong>.
         </p>
       </div>
     </div>

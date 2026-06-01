@@ -31,22 +31,42 @@ export function BeforeAfterSlider({
 
   useEffect(() => {
     const handleMouseUp = () => setIsDragging(false);
+
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (!isDragging || !containerRef.current) return;
+      const { left, width } = containerRef.current.getBoundingClientRect();
+      const x = Math.max(0, Math.min(e.clientX - left, width));
+      const percent = Math.max(0, Math.min((x / width) * 100, 100));
+      setSliderPosition(percent);
+    };
+
+    const handleGlobalTouchMove = (e: TouchEvent) => {
+      if (!isDragging || !containerRef.current) return;
+      const { left, width } = containerRef.current.getBoundingClientRect();
+      const x = Math.max(0, Math.min(e.touches[0].clientX - left, width));
+      const percent = Math.max(0, Math.min((x / width) * 100, 100));
+      setSliderPosition(percent);
+    };
+
     if (isDragging) {
       window.addEventListener('mouseup', handleMouseUp);
       window.addEventListener('touchend', handleMouseUp);
+      window.addEventListener('mousemove', handleGlobalMouseMove);
+      window.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
     }
     return () => {
       window.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('touchend', handleMouseUp);
+      window.removeEventListener('mousemove', handleGlobalMouseMove);
+      window.removeEventListener('touchmove', handleGlobalTouchMove);
     };
   }, [isDragging]);
 
   return (
     <div 
       ref={containerRef}
-      className="relative w-full aspect-square sm:aspect-video lg:aspect-[21/9] overflow-hidden rounded-3xl select-none group cursor-ew-resize shadow-elegant"
-      onMouseMove={onMouseMove}
-      onTouchMove={onTouchMove}
+      className="relative w-full aspect-square sm:aspect-video lg:aspect-[21/9] overflow-hidden rounded-3xl select-none group cursor-ew-resize shadow-elegant touch-pan-y"
+      style={{ touchAction: 'pan-y' }}
       onMouseDown={() => setIsDragging(true)}
       onTouchStart={() => setIsDragging(true)}
     >
