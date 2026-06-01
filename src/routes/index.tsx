@@ -372,7 +372,8 @@ function FirstTimePopup() {
 }
 
 
-function MockupFeedback() {
+function MockupFeedback({ variant = "floating" }: { variant?: "floating" | "header" }) {
+  const isHeader = variant === "header";
   const [open, setOpen] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -394,9 +395,9 @@ function MockupFeedback() {
   };
 
   return (
-    <div className="fixed top-1/2 -translate-y-1/2 right-4 sm:right-6 z-[60] flex flex-col items-end pointer-events-none">
+    <div className={isHeader ? "relative z-[60] flex flex-col items-end pointer-events-none" : "hidden sm:flex fixed top-1/2 -translate-y-1/2 right-6 z-[60] flex-col items-end pointer-events-none"}>
       {open && (
-        <div className="bg-background/95 backdrop-blur-md border border-border p-4 rounded-2xl shadow-elegant w-[280px] sm:w-[320px] mb-4 animate-fade-up pointer-events-auto origin-right">
+        <div className={`bg-background/95 backdrop-blur-md border border-border p-4 rounded-2xl shadow-elegant w-[280px] sm:w-[320px] animate-fade-up pointer-events-auto ${isHeader ? "absolute top-full right-0 mt-2 origin-top-right" : "mb-4 origin-right"}`}>
           <div className="flex justify-between items-center mb-3">
             <h3 className="font-semibold text-sm flex items-center gap-2">
               <MessageSquarePlus className="w-4 h-4 text-primary" />
@@ -434,11 +435,11 @@ function MockupFeedback() {
       
       <button 
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-5 py-3.5 rounded-full gradient-primary text-primary-foreground shadow-elegant hover:shadow-glow transition-smooth pointer-events-auto group font-bold"
+        className={`flex items-center rounded-full gradient-primary text-primary-foreground shadow-elegant hover:shadow-glow transition-smooth pointer-events-auto group font-bold ${isHeader ? "gap-1.5 px-3 py-1.5 text-[11px]" : "gap-2 px-5 py-3.5 text-sm"}`}
         aria-label="Leave feedback"
       >
-        <MessageSquarePlus className="w-5 h-5 group-hover:scale-110 transition-smooth" />
-        <span className="text-sm">Review this Mockup</span>
+        <MessageSquarePlus className={isHeader ? "w-3.5 h-3.5 group-hover:scale-110 transition-smooth" : "w-5 h-5 group-hover:scale-110 transition-smooth"} />
+        <span>{isHeader ? "Review Mockup" : "Review this Mockup"}</span>
       </button>
     </div>
   );
@@ -531,6 +532,9 @@ function Nav() {
           </div>
 
           <div className="flex items-center gap-2">
+            <div className="sm:hidden">
+              <MockupFeedback variant="header" />
+            </div>
             <a
               href="#" onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }}
               className={`hidden sm:inline-flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-full transition-smooth ${
