@@ -1005,6 +1005,7 @@ function Testimonials() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-secondary text-foreground px-5 py-3 text-sm font-medium hover:bg-secondary/70 transition-smooth"
+                onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }}
               >
                 Read all on Google <ArrowRight className="w-4 h-4" />
               </a>
@@ -1013,6 +1014,7 @@ function Testimonials() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-full gradient-primary text-primary-foreground px-5 py-3 text-sm font-medium shadow-soft hover:shadow-glow transition-smooth"
+                onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }}
               >
                 Leave a review <Star className="w-4 h-4 fill-current" />
               </a>
