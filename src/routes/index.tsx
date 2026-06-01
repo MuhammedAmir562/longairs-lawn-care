@@ -299,7 +299,71 @@ function Index() {
       <Footer />
       <FloatingCTA />
       <DemoBadge />
+      <FirstTimePopup />
       <StickyMobileCTA />
+    </div>
+  );
+}
+
+function FirstTimePopup() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const hasSeen = localStorage.getItem("vexbase-demo-seen");
+    if (!hasSeen) {
+      const timer = setTimeout(() => setOpen(true), 1500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    localStorage.setItem("vexbase-demo-seen", "true");
+  };
+
+  return (
+    <div
+      className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-smooth duration-500 ${
+        open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+      }`}
+    >
+      <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" onClick={dismiss} />
+      <div
+        className={`relative w-full max-w-md bg-background border border-border p-6 sm:p-8 rounded-[2rem] shadow-elegant transition-all duration-500 delay-100 ${
+          open ? "translate-y-0 scale-100" : "translate-y-8 scale-95"
+        }`}
+      >
+        <button
+          onClick={dismiss}
+          className="absolute top-4 right-4 w-10 h-10 rounded-full bg-secondary text-foreground grid place-items-center hover:bg-secondary/80 transition-smooth"
+          aria-label="Close"
+        >
+          <X className="w-5 h-5" />
+        </button>
+        <div className="flex flex-col items-center text-center mb-6">
+          <span className="w-16 h-16 rounded-2xl gradient-primary grid place-items-center mb-4 shadow-glow">
+            <Sparkles className="w-8 h-8 text-primary-foreground" />
+          </span>
+          <h3 className="font-semibold text-2xl text-balance">Welcome to the Prototype</h3>
+        </div>
+        <div className="space-y-4 text-[15px] text-muted-foreground leading-relaxed">
+          <p>
+            Please note that the photos and text used here are just placeholders for this mockup.
+          </p>
+          <p>
+            You might spot a few minor bugs or layout issues right now—these will all be completely polished and fixed in the final version!
+          </p>
+          <p className="text-foreground font-medium">
+            Remember: Almost everything you see is changeable. We can easily tweak the colors, layout, and style until it's absolutely perfect for you.
+          </p>
+        </div>
+        <button
+          onClick={dismiss}
+          className="mt-8 w-full rounded-full gradient-primary text-primary-foreground py-4 text-base font-semibold shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-smooth"
+        >
+          Got it, let's explore
+        </button>
+      </div>
     </div>
   );
 }
@@ -312,7 +376,7 @@ function DemoBadge() {
           <Sparkles className="w-4 h-4" /> Mockup Demo
         </div>
         <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed">
-          This is a demonstration website built by <strong className="text-foreground">Muhammed Amir</strong> to showcase modern web design.
+          This is a demonstration website built by <strong className="text-foreground">Muhammed Amir</strong> at <strong className="text-foreground">Vexbase</strong> to showcase modern web design.
         </p>
       </div>
     </div>
@@ -1323,7 +1387,7 @@ function Footer() {
           <div className="flex flex-col gap-1.5">
             <span>© {new Date().getFullYear()} Longair's Lawn Care & Garden Services. All rights reserved.</span>
             <span className="text-primary font-medium flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3" /> Design & Development Mockup by Muhammed Amir
+              <Sparkles className="w-3 h-3" /> Design & Development Mockup by Muhammed Amir @ Vexbase
             </span>
           </div>
           <div className="flex items-center gap-1.5">
