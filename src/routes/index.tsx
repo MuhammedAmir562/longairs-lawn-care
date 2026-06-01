@@ -52,7 +52,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Expert lawn care, grass cutting, weeding and garden maintenance in Newmilns, Galston and across Ayrshire. Family-run, fully insured. Free quotes within 24 hours — call 07541 216111.",
+          "Expert lawn care, grass cutting, weeding and garden maintenance in Newmilns, Galston and across Ayrshire. Family-run, fully insured. Free quotes within 24 hours — call [PHONE NUMBER].",
       },
       {
         name: "keywords",
@@ -87,8 +87,8 @@ export const Route = createFileRoute("/")({
           "@id": "/#business",
           name: "Longair's Lawn Care & Garden Services",
           image: heroLawn,
-          telephone: "+447541216111",
-          email: "longairslawncare@gmail.com",
+          telephone: "[PHONE NUMBER]",
+          email: "Email coming soon",
           priceRange: "££",
           address: {
             "@type": "PostalAddress",
@@ -114,7 +114,7 @@ export const Route = createFileRoute("/")({
             "South Ayrshire",
             "East Renfrewshire",
           ],
-          sameAs: ["https://www.facebook.com/LongairsLawnCare/"],
+          sameAs: ["#"],
           aggregateRating: {
             "@type": "AggregateRating",
             ratingValue: "4.9",
@@ -456,13 +456,13 @@ function Nav() {
 
           <div className="flex items-center gap-2">
             <a
-              href="tel:+447541216111"
+              href="#" onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }}
               className={`hidden sm:inline-flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-full transition-smooth ${
                 scrolled ? "text-foreground hover:text-primary" : "text-cream hover:bg-cream/10"
               }`}
               aria-label="Call Longair's Lawn Care"
             >
-              <Phone className="w-4 h-4" /> 07541 216111
+              <Phone className="w-4 h-4" /> [PHONE NUMBER]
             </a>
             <a
               href="#quote"
@@ -536,10 +536,10 @@ function Nav() {
           </nav>
           <div className="p-5 border-t border-border space-y-3">
             <a
-              href="tel:+447541216111"
+              href="#" onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }}
               className="flex items-center justify-center gap-2 w-full rounded-full bg-secondary text-foreground px-6 py-4 font-medium hover:bg-secondary/70 transition-smooth"
             >
-              <Phone className="w-4 h-4" /> 07541 216111
+              <Phone className="w-4 h-4" /> [PHONE NUMBER]
             </a>
             <a
               href="#quote"
@@ -597,10 +597,10 @@ function Hero() {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-smooth" />
             </a>
             <a
-              href="tel:+447541216111"
+              href="#" onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }}
               className="inline-flex items-center justify-center gap-2 rounded-full bg-cream/10 backdrop-blur-md border border-cream/30 text-cream px-7 py-4 text-base font-medium hover:bg-cream/20 transition-smooth"
             >
-              <Phone className="w-4 h-4" /> 07541 216111
+              <Phone className="w-4 h-4" /> [PHONE NUMBER]
             </a>
           </div>
 
@@ -1064,8 +1064,8 @@ function QuoteSection() {
             <div className="space-y-4">
               <div className="rounded-3xl bg-cream/5 border border-cream/10 p-7 space-y-4">
                 <div className="text-sm font-semibold text-cream/50 uppercase tracking-widest">Prefer to call?</div>
-                <ContactRow icon={Phone} label="Call us" value="07541 216111" href="tel:+447541216111" />
-                <ContactRow icon={Mail} label="Email us" value="longairslawncare@gmail.com" href="mailto:longairslawncare@gmail.com" />
+                <ContactRow icon={Phone} label="Call us" value="[PHONE NUMBER]" href="#" onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }} />
+                <ContactRow icon={Mail} label="Email us" value="Email coming soon" href="#" onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }} />
                 <ContactRow icon={MapPin} label="Based in" value="Newmilns, Ayrshire" />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -1346,7 +1346,7 @@ function Footer() {
             </p>
             <div className="mt-4 flex items-center gap-2">
               <a
-                href="https://www.facebook.com/LongairsLawnCare/"
+                href="#" onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
@@ -1355,7 +1355,7 @@ function Footer() {
                 <Facebook className="w-4 h-4" />
               </a>
               <a
-                href="mailto:longairslawncare@gmail.com"
+                href="#" onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }}
                 aria-label="Email"
                 className="w-10 h-10 grid place-items-center rounded-full bg-secondary hover:gradient-primary hover:text-primary-foreground transition-smooth"
               >
@@ -1377,8 +1377,8 @@ function Footer() {
           <div>
             <div className="text-sm font-semibold mb-3">Contact</div>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><a href="tel:+447541216111" className="hover:text-primary transition-smooth">07541 216111</a></li>
-              <li><a href="mailto:longairslawncare@gmail.com" className="hover:text-primary transition-smooth break-all">longairslawncare@gmail.com</a></li>
+              <li><a href="#" onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }} className="hover:text-primary transition-smooth">[PHONE NUMBER]</a></li>
+              <li><a href="#" onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }} className="hover:text-primary transition-smooth break-all">Email coming soon</a></li>
               <li>Newmilns, Ayrshire</li>
             </ul>
           </div>
@@ -1402,7 +1402,7 @@ function Footer() {
 function FloatingCTA() {
   return (
     <a
-      href="https://wa.me/447541216111"
+      href="#" onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Message us on WhatsApp"
@@ -1418,7 +1418,7 @@ function StickyMobileCTA() {
     <div className="sm:hidden fixed bottom-0 inset-x-0 z-40 p-3 pb-safe bg-background/95 backdrop-blur-xl border-t border-border shadow-elegant">
       <div className="grid grid-cols-2 gap-2">
         <a
-          href="tel:+447541216111"
+          href="#" onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }}
           className="inline-flex items-center justify-center gap-2 rounded-full bg-secondary text-foreground px-4 py-3 text-sm font-medium cursor-pointer hover:bg-secondary/80 transition-smooth"
         >
           <Phone className="w-4 h-4" /> Call
