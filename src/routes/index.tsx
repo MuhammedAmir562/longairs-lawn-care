@@ -326,15 +326,13 @@ function FirstTimePopup() {
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-smooth duration-500 ${
-        open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-      }`}
+      className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-smooth duration-500 ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
     >
       <div className="absolute inset-0 bg-background/60 backdrop-blur-sm" onClick={dismiss} />
       <div
-        className={`relative w-full max-w-md bg-background border border-border p-6 sm:p-8 rounded-[2rem] shadow-elegant transition-all duration-500 delay-100 ${
-          open ? "translate-y-0 scale-100" : "translate-y-8 scale-95"
-        }`}
+        className={`relative w-full max-w-md bg-background border border-border p-6 sm:p-8 rounded-[2rem] shadow-elegant transition-all duration-500 delay-100 ${open ? "translate-y-0 scale-100" : "translate-y-8 scale-95"
+          }`}
       >
         <button
           onClick={dismiss}
@@ -381,11 +379,11 @@ function MockupFeedback({ variant = "floating" }: { variant?: "floating" | "head
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!feedback.trim()) return;
-    
+
     posthog.capture("mockup_feedback", {
       feedback: feedback
     });
-    
+
     setSubmitted(true);
     setTimeout(() => {
       setOpen(false);
@@ -407,22 +405,22 @@ function MockupFeedback({ variant = "floating" }: { variant?: "floating" | "head
               <X className="w-4 h-4" />
             </button>
           </div>
-          
+
           {submitted ? (
             <div className="text-sm text-center py-6 text-primary font-medium flex flex-col items-center gap-2">
               <Check className="w-6 h-6" />
-              Feedback sent to PostHog!
+              Feedback sent to Muhammed!
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-              <textarea 
+              <textarea
                 value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
                 placeholder="What do you think of this mockup?"
                 className="w-full h-24 rounded-xl border border-input bg-background/50 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none placeholder:text-muted-foreground/50"
                 required
               />
-              <button 
+              <button
                 type="submit"
                 className="w-full rounded-xl gradient-primary text-primary-foreground py-2 text-sm font-medium shadow-soft hover:shadow-glow transition-smooth"
               >
@@ -432,8 +430,8 @@ function MockupFeedback({ variant = "floating" }: { variant?: "floating" | "head
           )}
         </div>
       )}
-      
-      <button 
+
+      <button
         onClick={() => setOpen(!open)}
         className={`flex items-center rounded-full gradient-primary text-primary-foreground shadow-elegant hover:shadow-glow transition-smooth pointer-events-auto group font-bold ${isHeader ? "gap-1.5 px-3 py-1.5 text-[11px]" : "gap-2 px-5 py-3.5 text-sm"}`}
         aria-label="Leave feedback"
@@ -492,11 +490,10 @@ function Nav() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-smooth ${
-          scrolled
+        className={`fixed top-0 left-0 right-0 z-50 transition-smooth ${scrolled
             ? "backdrop-blur-xl bg-background/85 border-b border-border/60 shadow-soft"
             : "bg-transparent"
-        }`}
+          }`}
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-2.5 font-semibold group">
@@ -504,9 +501,8 @@ function Nav() {
               <Leaf className="w-4 h-4 text-primary-foreground" />
             </span>
             <span
-              className={`text-base sm:text-lg tracking-tight transition-smooth flex items-center gap-2 ${
-                scrolled ? "text-foreground" : "text-cream"
-              }`}
+              className={`text-base sm:text-lg tracking-tight transition-smooth flex items-center gap-2 ${scrolled ? "text-foreground" : "text-cream"
+                }`}
             >
               Longair's
               <span className="hidden sm:inline-block px-2 py-0.5 rounded-md bg-primary text-primary-foreground text-[10px] uppercase tracking-wider font-bold shadow-soft">
@@ -520,11 +516,10 @@ function Nav() {
               <a
                 key={l.href}
                 href={l.href}
-                className={`px-4 py-2 text-sm font-medium rounded-full transition-smooth ${
-                  scrolled
+                className={`px-4 py-2 text-sm font-medium rounded-full transition-smooth ${scrolled
                     ? "text-foreground/80 hover:text-primary hover:bg-secondary"
                     : "text-cream/85 hover:text-cream hover:bg-cream/10"
-                }`}
+                  }`}
               >
                 {l.label}
               </a>
@@ -537,9 +532,8 @@ function Nav() {
             </div>
             <a
               href="#" onClick={(e) => { e.preventDefault(); alert("This is a mockup. Links will be active in the final version."); }}
-              className={`hidden sm:inline-flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-full transition-smooth ${
-                scrolled ? "text-foreground hover:text-primary" : "text-cream hover:bg-cream/10"
-              }`}
+              className={`hidden sm:inline-flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-full transition-smooth ${scrolled ? "text-foreground hover:text-primary" : "text-cream hover:bg-cream/10"
+                }`}
               aria-label="Call Longair's Lawn Care"
             >
               <Phone className="w-4 h-4" /> [PHONE NUMBER]
@@ -552,11 +546,10 @@ function Nav() {
             </a>
             <button
               onClick={() => setOpen(true)}
-              className={`lg:hidden grid place-items-center w-11 h-11 rounded-full transition-smooth ${
-                scrolled
+              className={`lg:hidden grid place-items-center w-11 h-11 rounded-full transition-smooth ${scrolled
                   ? "bg-secondary text-foreground hover:bg-secondary/80"
                   : "bg-cream/15 text-cream hover:bg-cream/25 backdrop-blur-md"
-              }`}
+                }`}
               aria-label="Open menu"
             >
               <Menu className="w-5 h-5" />
@@ -567,21 +560,18 @@ function Nav() {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed inset-0 z-[60] lg:hidden transition-smooth ${
-          open ? "pointer-events-auto" : "pointer-events-none"
-        }`}
+        className={`fixed inset-0 z-[60] lg:hidden transition-smooth ${open ? "pointer-events-auto" : "pointer-events-none"
+          }`}
         aria-hidden={!open}
       >
         <div
           onClick={() => setOpen(false)}
-          className={`absolute inset-0 bg-foreground/40 backdrop-blur-sm transition-opacity duration-500 ${
-            open ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute inset-0 bg-foreground/40 backdrop-blur-sm transition-opacity duration-500 ${open ? "opacity-100" : "opacity-0"
+            }`}
         />
         <aside
-          className={`absolute top-0 right-0 h-full w-[88%] max-w-sm bg-background shadow-elegant flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-            open ? "translate-x-0" : "translate-x-full"
-          }`}
+          className={`absolute top-0 right-0 h-full w-[88%] max-w-sm bg-background shadow-elegant flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${open ? "translate-x-0" : "translate-x-full"
+            }`}
         >
           <div className="flex items-center justify-between p-5 border-b border-border">
             <div className="flex items-center gap-2.5 font-semibold">
@@ -605,9 +595,8 @@ function Nav() {
                 href={l.href}
                 onClick={() => setOpen(false)}
                 style={{ transitionDelay: `${i * 40}ms` }}
-                className={`flex items-center justify-between px-4 py-4 rounded-2xl text-lg font-medium hover:bg-secondary transition-smooth ${
-                  open ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
-                } duration-500`}
+                className={`flex items-center justify-between px-4 py-4 rounded-2xl text-lg font-medium hover:bg-secondary transition-smooth ${open ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
+                  } duration-500`}
               >
                 {l.label}
                 <ArrowRight className="w-4 h-4 text-primary" />
@@ -1092,15 +1081,13 @@ function Faq() {
                 >
                   <span className="text-base sm:text-lg">{f.q}</span>
                   <ChevronDown
-                    className={`w-5 h-5 shrink-0 text-primary transition-smooth ${
-                      open === i ? "rotate-180" : ""
-                    }`}
+                    className={`w-5 h-5 shrink-0 text-primary transition-smooth ${open === i ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
                 <div
-                  className={`grid transition-all duration-500 ease-out ${
-                    open === i ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                  }`}
+                  className={`grid transition-all duration-500 ease-out ${open === i ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    }`}
                 >
                   <div className="overflow-hidden">
                     <p className="px-5 sm:px-6 pb-5 text-sm text-muted-foreground leading-relaxed">
@@ -1276,10 +1263,10 @@ function Gallery() {
           </div>
         </Reveal>
         <Reveal delay={100}>
-          <BeforeAfterSlider 
-            beforeImage={beforeLawn} 
-            afterImage={afterLawn} 
-            beforeLabel="Before" 
+          <BeforeAfterSlider
+            beforeImage={beforeLawn}
+            afterImage={afterLawn}
+            beforeLabel="Before"
             afterLabel="After"
           />
         </Reveal>
@@ -1313,7 +1300,7 @@ function Gallery() {
               // Asymmetric bento sizing
               const isLarge = i === 0 || i === 3;
               const spanClass = isLarge ? "col-span-2 row-span-2" : "col-span-2 md:col-span-1 row-span-1 md:row-span-2";
-              
+
               return (
                 <Reveal key={i} delay={i * 50}>
                   <button
@@ -1321,11 +1308,11 @@ function Gallery() {
                     aria-label={`View full image: ${img.caption}`}
                     className={`btn-press group relative w-full h-full overflow-hidden rounded-2xl sm:rounded-3xl bg-forest-deep ${spanClass}`}
                   >
-                    <img 
-                      src={img.src} 
-                      alt={img.alt} 
+                    <img
+                      src={img.src}
+                      alt={img.alt}
                       loading="lazy"
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] cubic-bezier(0.23,1,0.32,1) group-hover:scale-105" 
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] cubic-bezier(0.23,1,0.32,1) group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
@@ -1360,7 +1347,7 @@ function Gallery() {
           >
             <X className="w-5 h-5" />
           </button>
-          
+
           <button
             onClick={(e) => { e.stopPropagation(); setActive((a) => (a === null ? 0 : (a - 1 + gallery.length) % gallery.length)); }}
             aria-label="Previous"
@@ -1368,7 +1355,7 @@ function Gallery() {
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          
+
           <button
             onClick={(e) => { e.stopPropagation(); setActive((a) => (a === null ? 0 : (a + 1) % gallery.length)); }}
             aria-label="Next"
@@ -1376,7 +1363,7 @@ function Gallery() {
           >
             <ChevronRight className="w-5 h-5" />
           </button>
-          
+
           <div className="w-full max-w-6xl p-4 sm:p-12 flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
             <img
               src={gallery[active].src}
@@ -1402,10 +1389,10 @@ function Gallery() {
 function GoogleG({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/>
-      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 18.9 13 24 13c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.4 6.3 14.7z"/>
-      <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2c-2 1.5-4.6 2.4-7.2 2.4-5.2 0-9.7-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/>
-      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.6l6.2 5.2C41.4 35.3 44 30.1 44 24c0-1.3-.1-2.4-.4-3.5z"/>
+      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
+      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 18.9 13 24 13c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.4 6.3 14.7z" />
+      <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2c-2 1.5-4.6 2.4-7.2 2.4-5.2 0-9.7-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z" />
+      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.6l6.2 5.2C41.4 35.3 44 30.1 44 24c0-1.3-.1-2.4-.4-3.5z" />
     </svg>
   );
 }
