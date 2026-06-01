@@ -13,7 +13,12 @@ export default defineConfig({
       // Redirect TanStack Start's bundled server entry to src/server.ts
       server: { entry: "server" },
     }),
-    nitro(),
+    nitro({
+      routeRules: {
+        "/ingest/static/**": { proxy: "https://us-assets.i.posthog.com/static/**" },
+        "/ingest/**": { proxy: "https://us.i.posthog.com/**" },
+      },
+    }),
     react(),
   ],
 });

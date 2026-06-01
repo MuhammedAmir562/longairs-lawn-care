@@ -16,7 +16,8 @@ import appCss from "../styles.css?url";
 
 if (typeof window !== "undefined") {
   posthog.init("phc_oy7rW2BwnfUrcRYCNKvAfshb5t65AedAvQGuNqt5pvHS", {
-    api_host: "https://us.i.posthog.com",
+    api_host: "/ingest",
+    ui_host: "https://us.posthog.com",
     person_profiles: "always",
   });
 
