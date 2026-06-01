@@ -15,8 +15,8 @@ import { PostHogProvider } from "posthog-js/react";
 import appCss from "../styles.css?url";
 
 if (typeof window !== "undefined") {
-  posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY, {
-    api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+  posthog.init("phc_oy7rW2BwnfUrcRYCNKvAfshb5t65AedAvQGuNqt5pvHS", {
+    api_host: "https://us.i.posthog.com",
     person_profiles: "always",
   });
 
