@@ -298,7 +298,23 @@ function Index() {
       <QuoteSection />
       <Footer />
       <FloatingCTA />
+      <DemoBadge />
       <StickyMobileCTA />
+    </div>
+  );
+}
+
+function DemoBadge() {
+  return (
+    <div className="fixed bottom-24 sm:bottom-6 left-4 sm:left-6 z-50 animate-fade-up pointer-events-none">
+      <div className="bg-background/85 backdrop-blur-md border border-border p-4 rounded-2xl shadow-elegant max-w-[220px] pointer-events-auto">
+        <div className="flex items-center gap-2 font-semibold text-primary mb-1">
+          <Sparkles className="w-4 h-4" /> Mockup Demo
+        </div>
+        <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed">
+          This is a demonstration website built by <strong className="text-foreground">Muhammed Amir</strong> to showcase modern web design.
+        </p>
+      </div>
     </div>
   );
 }
@@ -347,11 +363,14 @@ function Nav() {
               <Leaf className="w-4 h-4 text-primary-foreground" />
             </span>
             <span
-              className={`text-base sm:text-lg tracking-tight transition-smooth ${
+              className={`text-base sm:text-lg tracking-tight transition-smooth flex items-center gap-2 ${
                 scrolled ? "text-foreground" : "text-cream"
               }`}
             >
               Longair's
+              <span className="hidden sm:inline-block px-2 py-0.5 rounded-md bg-primary text-primary-foreground text-[10px] uppercase tracking-wider font-bold shadow-soft">
+                Demo
+              </span>
             </span>
           </a>
 
@@ -488,9 +507,14 @@ function Hero() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-12 w-full">
         <div className="max-w-2xl animate-fade-up">
-          <span className="inline-flex items-center gap-2 rounded-full bg-cream/10 backdrop-blur-md border border-cream/20 px-3 py-1.5 text-xs font-medium text-cream">
-            <Star className="w-3.5 h-3.5 fill-cream" /> 90% Recommended · Ayrshire
-          </span>
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary text-primary-foreground px-3 py-1.5 text-xs font-semibold shadow-soft">
+              <Sparkles className="w-3.5 h-3.5" /> Concept Mockup
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full bg-cream/10 backdrop-blur-md border border-cream/20 px-3 py-1.5 text-xs font-medium text-cream">
+              <Star className="w-3.5 h-3.5 fill-cream" /> 90% Recommended · Ayrshire
+            </span>
+          </div>
           <h1 className="mt-5 text-[2.5rem] leading-[1.05] sm:text-6xl lg:text-7xl font-semibold text-cream text-balance">
             Beautiful gardens,{" "}
             <span className="italic text-primary-glow">expertly cared for.</span>
@@ -1295,8 +1319,13 @@ function Footer() {
             </ul>
           </div>
         </div>
-        <div className="pt-8 border-t border-border flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center text-xs text-muted-foreground">
-          <div>© {new Date().getFullYear()} Longair's Lawn Care & Garden Services. All rights reserved.</div>
+        <div className="pt-8 border-t border-border flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center text-xs text-muted-foreground">
+          <div className="flex flex-col gap-1.5">
+            <span>© {new Date().getFullYear()} Longair's Lawn Care & Garden Services. All rights reserved.</span>
+            <span className="text-primary font-medium flex items-center gap-1.5">
+              <Sparkles className="w-3 h-3" /> Design & Development Mockup by Muhammed Amir
+            </span>
+          </div>
           <div className="flex items-center gap-1.5">
             <Award className="w-3.5 h-3.5 text-primary" /> 90% recommended in Ayrshire
           </div>
