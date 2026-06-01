@@ -37,6 +37,9 @@ import gallery3 from "@/assets/gallery-3.jpg";
 import gallery4 from "@/assets/gallery-4.jpg";
 import gallery5 from "@/assets/gallery-5.jpg";
 import gallery6 from "@/assets/gallery-6.jpg";
+import beforeLawn from "@/assets/before-lawn.png";
+import afterLawn from "@/assets/after-lawn.png";
+import { BeforeAfterSlider } from "@/components/ui/BeforeAfterSlider";
 import { useReveal } from "@/hooks/use-reveal";
 
 export const Route = createFileRoute("/")({
@@ -44,12 +47,12 @@ export const Route = createFileRoute("/")({
     meta: [
       {
         title:
-          "Longair's Lawn Care & Garden Services | Ayrshire's Trusted Gardeners",
+          "Longairs Lawn Care | Expert Gardener in Newmilns & Galston",
       },
       {
         name: "description",
         content:
-          "Professional lawn care, hedge trimming and garden services across Newmilns, North, East & South Ayrshire and East Renfrewshire. 90% recommended — free quotes within 24 hours.",
+          "Expert lawn care, grass cutting, weeding and garden maintenance in Newmilns, Galston and across Ayrshire. Family-run, fully insured. Free quotes within 24 hours — call 07541 216111.",
       },
       {
         name: "keywords",
@@ -953,91 +956,115 @@ function QuoteSection() {
   return (
     <section id="quote" className="py-20 sm:py-28 bg-forest-deep text-cream relative overflow-hidden">
       <div className="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_top_right,oklch(0.62_0.16_142),transparent_60%)]" />
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid lg:grid-cols-5 gap-10 lg:gap-16 items-start">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Header */}
+        <Reveal>
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <span className="text-xs font-semibold tracking-[0.2em] uppercase text-primary-glow">Free Quote</span>
+            <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance">
+              Let's get your garden looking its best.
+            </h2>
+            <p className="mt-4 text-cream/75">
+              Fill in the form and we'll reply with a friendly, no-obligation quote — usually within 24 hours.
+            </p>
+          </div>
+        </Reveal>
+
+        <div className="grid lg:grid-cols-[1fr_580px] gap-8 items-start">
+          {/* Left — contact info + trust */}
           <Reveal>
-            <div className="lg:col-span-2">
-              <span className="text-xs font-semibold tracking-[0.2em] uppercase text-primary-glow">
-                Free Quote
-              </span>
-              <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance">
-                Let's get your garden looking its best.
-              </h2>
-              <p className="mt-5 text-cream/80 text-balance">
-                Tell us about the work and we'll get back to you with a friendly,
-                no-obligation quote — usually within 24 hours.
-              </p>
-              <div className="mt-8 space-y-3">
+            <div className="space-y-4">
+              <div className="rounded-3xl bg-cream/5 border border-cream/10 p-7 space-y-4">
+                <div className="text-sm font-semibold text-cream/50 uppercase tracking-widest">Prefer to call?</div>
                 <ContactRow icon={Phone} label="Call us" value="07541 216111" href="tel:+447541216111" />
                 <ContactRow icon={Mail} label="Email us" value="longairslawncare@gmail.com" href="mailto:longairslawncare@gmail.com" />
                 <ContactRow icon={MapPin} label="Based in" value="Newmilns, Ayrshire" />
               </div>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { icon: Shield, label: "Fully Insured", sub: "Peace of mind" },
+                  { icon: Clock, label: "24h Response", sub: "Usually same day" },
+                  { icon: ThumbsUp, label: "90% Recommended", sub: "Verified reviews" },
+                  { icon: Award, label: "Family Run", sub: "Est. in Ayrshire" },
+                ].map(({ icon: Icon, label, sub }) => (
+                  <div key={label} className="rounded-2xl bg-cream/5 border border-cream/10 p-4 flex items-center gap-3">
+                    <span className="w-9 h-9 rounded-xl gradient-primary grid place-items-center shrink-0">
+                      <Icon className="w-4 h-4 text-primary-foreground" />
+                    </span>
+                    <div>
+                      <div className="text-sm font-semibold text-cream leading-tight">{label}</div>
+                      <div className="text-[11px] text-cream/50 mt-0.5">{sub}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </Reveal>
 
+          {/* Right — form */}
           <Reveal delay={100}>
-            <div className="lg:col-span-3">
-              <form
-                onSubmit={handleSubmit}
-                className="rounded-3xl bg-background text-foreground shadow-elegant p-6 sm:p-10 border border-border"
-              >
-                {submitted ? (
-                  <div className="py-16 text-center">
-                    <span className="inline-grid place-items-center w-14 h-14 rounded-full gradient-primary mb-5 shadow-glow">
-                      <Check className="w-6 h-6 text-primary-foreground" strokeWidth={3} />
-                    </span>
-                    <h3 className="text-2xl font-semibold">Thank you!</h3>
-                    <p className="mt-2 text-muted-foreground">
-                      We've received your enquiry and will be in touch shortly.
-                    </p>
+            <form
+              onSubmit={handleSubmit}
+              className="rounded-3xl bg-background text-foreground shadow-elegant p-7 sm:p-10 border border-border"
+            >
+              {submitted ? (
+                <div className="py-16 text-center">
+                  <span className="inline-grid place-items-center w-14 h-14 rounded-full gradient-primary mb-5 shadow-glow">
+                    <Check className="w-6 h-6 text-primary-foreground" strokeWidth={3} />
+                  </span>
+                  <h3 className="text-2xl font-semibold">Thank you!</h3>
+                  <p className="mt-2 text-muted-foreground">
+                    We've received your enquiry and will be in touch shortly.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <Field label="Your name" name="name" required placeholder="Jane Smith" autoComplete="name" />
+                    <Field label="Phone" name="phone" type="tel" required placeholder="07…" autoComplete="tel" inputMode="tel" />
+                    <Field label="Email" name="email" type="email" required placeholder="you@example.com" className="sm:col-span-2" autoComplete="email" />
+                    <Field label="Postcode / Town" name="postcode" required placeholder="KA16…" className="sm:col-span-2" autoComplete="postal-code" />
                   </div>
-                ) : (
-                  <>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <Field label="Your name" name="name" required placeholder="Jane Smith" />
-                      <Field label="Phone" name="phone" type="tel" required placeholder="07…" />
-                      <Field label="Email" name="email" type="email" required placeholder="you@example.com" className="sm:col-span-2" />
-                      <Field label="Postcode / Town" name="postcode" required placeholder="KA16…" className="sm:col-span-2" />
-                    </div>
-                    <div className="mt-4">
-                      <label className="block text-sm font-medium mb-2">Service needed</label>
-                      <select
-                        name="service"
-                        required
-                        defaultValue=""
-                        className="w-full h-12 rounded-xl border border-input bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-smooth"
-                      >
-                        <option value="" disabled>Select a service…</option>
-                        <option>Lawn care / grass cutting</option>
-                        <option>Hedge trimming</option>
-                        <option>Garden maintenance</option>
-                        <option>Patio / pressure washing</option>
-                        <option>Full garden transformation</option>
-                        <option>Something else</option>
-                      </select>
-                    </div>
-                    <div className="mt-4">
-                      <label className="block text-sm font-medium mb-2">Tell us about the job</label>
-                      <textarea
-                        name="message"
-                        rows={4}
-                        placeholder="A few details about your garden and what you'd like done…"
-                        className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-smooth resize-none"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-full gradient-primary text-primary-foreground px-6 py-4 text-base font-medium shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-smooth"
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium mb-2" htmlFor="service">Service needed</label>
+                    <select
+                      id="service"
+                      name="service"
+                      required
+                      defaultValue=""
+                      className="w-full h-12 rounded-xl border border-input bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-smooth"
                     >
-                      Request My Free Quote <ArrowRight className="w-4 h-4" />
-                    </button>
-                    <p className="mt-3 text-xs text-muted-foreground text-center">
-                      No spam, ever. We typically reply within 24 hours.
-                    </p>
-                  </>
-                )}
-              </form>
-            </div>
+                      <option value="" disabled>Select a service…</option>
+                      <option>Lawn care / grass cutting</option>
+                      <option>Hedge trimming</option>
+                      <option>Garden maintenance</option>
+                      <option>Patio / pressure washing</option>
+                      <option>Full garden transformation</option>
+                      <option>Something else</option>
+                    </select>
+                  </div>
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium mb-2" htmlFor="message">Tell us about the job</label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      rows={4}
+                      placeholder="A few details about your garden and what you'd like done…"
+                      className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-smooth resize-none"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-full gradient-primary text-primary-foreground px-6 py-4 text-base font-medium shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-smooth"
+                  >
+                    Request My Free Quote <ArrowRight className="w-4 h-4" />
+                  </button>
+                  <p className="mt-3 text-xs text-muted-foreground text-center">
+                    No spam, ever. We typically reply within 24 hours.
+                  </p>
+                </>
+              )}
+            </form>
           </Reveal>
         </div>
       </div>
@@ -1064,59 +1091,93 @@ function Gallery() {
   }, [active]);
 
   return (
-    <section id="gallery" className="py-20 sm:py-28 bg-secondary/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+    <section id="gallery" className="bg-forest-deep text-cream pt-20">
+      {/* Before & After Hero Section */}
+      <div className="pb-20 sm:pb-28 px-4 sm:px-6 max-w-5xl mx-auto">
         <Reveal>
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
-            <div className="max-w-2xl">
-              <Eyebrow>Our Work</Eyebrow>
-              <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance">
-                Real gardens. Real transformations.
-              </h2>
-              <p className="mt-4 text-muted-foreground">
-                A glimpse of recent jobs across Ayrshire and East Renfrewshire — tap any photo to take a closer look.
-              </p>
-            </div>
-            <a
-              href="#quote"
-              className="hidden sm:inline-flex items-center gap-2 rounded-full bg-background border border-border px-5 py-3 text-sm font-medium hover:border-primary/40 hover:shadow-soft transition-smooth whitespace-nowrap"
-            >
-              Get yours quoted <ArrowRight className="w-4 h-4" />
-            </a>
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <Eyebrow>Transformation</Eyebrow>
+            <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance text-cream">
+              The difference is night and day.
+            </h2>
+            <p className="mt-4 text-cream/70">
+              Slide to see a real garden transformation we completed. We take overgrown, untidy spaces and return them to pristine condition.
+            </p>
           </div>
         </Reveal>
+        <Reveal delay={100}>
+          <BeforeAfterSlider 
+            beforeImage={beforeLawn} 
+            afterImage={afterLawn} 
+            beforeLabel="Before" 
+            afterLabel="After"
+          />
+        </Reveal>
+      </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 auto-rows-[180px] sm:auto-rows-[220px]">
-          {gallery.map((g, i) => (
-            <Reveal key={i} delay={i * 60}>
-              <button
-                onClick={() => setActive(i)}
-                aria-label={`View photo: ${g.caption}`}
-                className={`group relative w-full h-full overflow-hidden rounded-2xl sm:rounded-3xl shadow-soft hover:shadow-elegant transition-smooth ${g.span}`}
+      <div className="py-20 sm:py-28 bg-secondary/10 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <Reveal>
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
+              <div>
+                <Eyebrow>Our Work</Eyebrow>
+                <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance text-cream">
+                  Recent Projects
+                </h2>
+                <p className="mt-4 text-cream/70 max-w-md">
+                  A selection of gardens we've recently cared for across Ayrshire. Click any image to view full size.
+                </p>
+              </div>
+              <a
+                href="#quote"
+                className="btn-press hidden sm:inline-flex items-center gap-2 rounded-full gradient-primary text-primary-foreground px-6 py-3 text-sm font-medium shadow-soft whitespace-nowrap"
               >
-                <img
-                  src={g.src}
-                  alt={g.alt}
-                  width={1024}
-                  height={1024}
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-smooth duration-[1200ms]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/85 via-forest-deep/10 to-transparent opacity-80 group-hover:opacity-90 transition-smooth" />
-                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 text-cream translate-y-1 group-hover:translate-y-0 transition-smooth">
-                  <div className="text-[11px] sm:text-xs tracking-[0.2em] uppercase text-primary-glow font-semibold">View</div>
-                  <div className="text-sm sm:text-base font-medium mt-1 text-balance">{g.caption}</div>
-                </div>
-              </button>
-            </Reveal>
-          ))}
+                Get your free quote <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          </Reveal>
+
+          {/* Bento Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 auto-rows-[160px] sm:auto-rows-[240px]">
+            {gallery.map((img, i) => {
+              // Asymmetric bento sizing
+              const isLarge = i === 0 || i === 3;
+              const spanClass = isLarge ? "col-span-2 row-span-2" : "col-span-2 md:col-span-1 row-span-1 md:row-span-2";
+              
+              return (
+                <Reveal key={i} delay={i * 50}>
+                  <button
+                    onClick={() => setActive(i)}
+                    aria-label={`View full image: ${img.caption}`}
+                    className={`btn-press group relative w-full h-full overflow-hidden rounded-2xl sm:rounded-3xl bg-forest-deep ${spanClass}`}
+                  >
+                    <img 
+                      src={img.src} 
+                      alt={img.alt} 
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] cubic-bezier(0.23,1,0.32,1) group-hover:scale-105" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-7 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                      <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-primary-glow block mb-1.5">
+                        Tap to expand
+                      </span>
+                      <p className="text-sm sm:text-lg font-semibold text-white leading-tight">
+                        {img.caption}
+                      </p>
+                    </div>
+                  </button>
+                </Reveal>
+              );
+            })}
+          </div>
         </div>
       </div>
 
+      {/* Lightbox */}
       {active !== null && (
         <div
-          className="fixed inset-0 z-[80] bg-forest-deep/95 backdrop-blur-md animate-fade-up"
+          className="fixed inset-0 z-[80] bg-forest-deep/98 backdrop-blur-xl animate-fade-up flex items-center justify-center"
           onClick={() => setActive(null)}
           role="dialog"
           aria-modal="true"
@@ -1124,43 +1185,49 @@ function Gallery() {
         >
           <button
             onClick={(e) => { e.stopPropagation(); setActive(null); }}
-            className="absolute top-4 right-4 z-10 grid place-items-center w-12 h-12 rounded-full bg-cream/10 text-cream hover:bg-cream/20 backdrop-blur-md transition-smooth"
             aria-label="Close"
+            className="btn-press absolute top-4 right-4 z-10 grid place-items-center w-12 h-12 rounded-full bg-white/10 text-white hover:bg-white/20 transition-smooth"
           >
             <X className="w-5 h-5" />
           </button>
+          
           <button
             onClick={(e) => { e.stopPropagation(); setActive((a) => (a === null ? 0 : (a - 1 + gallery.length) % gallery.length)); }}
-            className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-10 grid place-items-center w-12 h-12 rounded-full bg-cream/10 text-cream hover:bg-cream/20 backdrop-blur-md transition-smooth"
             aria-label="Previous"
+            className="btn-press absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-10 grid place-items-center w-12 h-12 rounded-full bg-white/10 text-white hover:bg-white/20 transition-smooth"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
+          
           <button
             onClick={(e) => { e.stopPropagation(); setActive((a) => (a === null ? 0 : (a + 1) % gallery.length)); }}
-            className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-10 grid place-items-center w-12 h-12 rounded-full bg-cream/10 text-cream hover:bg-cream/20 backdrop-blur-md transition-smooth"
             aria-label="Next"
+            className="btn-press absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-10 grid place-items-center w-12 h-12 rounded-full bg-white/10 text-white hover:bg-white/20 transition-smooth"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
-          <div className="absolute inset-0 grid place-items-center p-4 sm:p-12" onClick={(e) => e.stopPropagation()}>
-            <figure className="max-w-5xl w-full">
-              <img
-                src={gallery[active].src}
-                alt={gallery[active].alt}
-                className="w-full max-h-[80svh] object-contain rounded-2xl shadow-elegant"
-              />
-              <figcaption className="mt-4 text-center text-cream/90 text-sm">
+          
+          <div className="w-full max-w-6xl p-4 sm:p-12 flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={gallery[active].src}
+              alt={gallery[active].alt}
+              className="w-full max-h-[75svh] object-contain rounded-2xl shadow-glow"
+            />
+            <div className="mt-6 text-center animate-fade-up" style={{ animationDelay: '150ms' }}>
+              <p className="text-lg sm:text-xl font-semibold text-white">
                 {gallery[active].caption}
-                <span className="text-cream/50 ml-2">· {active + 1} / {gallery.length}</span>
-              </figcaption>
-            </figure>
+              </p>
+              <p className="text-sm text-white/50 mt-2">
+                Image {active + 1} of {gallery.length}
+              </p>
+            </div>
           </div>
         </div>
       )}
     </section>
   );
 }
+
 
 function GoogleG({ className = "" }: { className?: string }) {
   return (
@@ -1255,17 +1322,17 @@ function FloatingCTA() {
 
 function StickyMobileCTA() {
   return (
-    <div className="sm:hidden fixed bottom-0 inset-x-0 z-40 p-3 bg-background/95 backdrop-blur-xl border-t border-border shadow-elegant">
+    <div className="sm:hidden fixed bottom-0 inset-x-0 z-40 p-3 pb-safe bg-background/95 backdrop-blur-xl border-t border-border shadow-elegant">
       <div className="grid grid-cols-2 gap-2">
         <a
           href="tel:+447541216111"
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-secondary text-foreground px-4 py-3 text-sm font-medium"
+          className="inline-flex items-center justify-center gap-2 rounded-full bg-secondary text-foreground px-4 py-3 text-sm font-medium cursor-pointer hover:bg-secondary/80 transition-smooth"
         >
           <Phone className="w-4 h-4" /> Call
         </a>
         <a
           href="#quote"
-          className="inline-flex items-center justify-center gap-2 rounded-full gradient-primary text-primary-foreground px-4 py-3 text-sm font-medium shadow-soft"
+          className="inline-flex items-center justify-center gap-2 rounded-full gradient-primary text-primary-foreground px-4 py-3 text-sm font-medium shadow-soft cursor-pointer hover:shadow-glow transition-smooth"
         >
           Free Quote <ArrowRight className="w-4 h-4" />
         </a>
@@ -1335,6 +1402,8 @@ function Field({
   required,
   placeholder,
   className = "",
+  autoComplete,
+  inputMode,
 }: {
   label: string;
   name: string;
@@ -1342,15 +1411,20 @@ function Field({
   required?: boolean;
   placeholder?: string;
   className?: string;
+  autoComplete?: string;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
 }) {
   return (
     <div className={className}>
-      <label className="block text-sm font-medium mb-2">{label}</label>
+      <label className="block text-sm font-medium mb-2" htmlFor={name}>{label}</label>
       <input
+        id={name}
         type={type}
         name={name}
         required={required}
         placeholder={placeholder}
+        autoComplete={autoComplete}
+        inputMode={inputMode}
         className="w-full h-12 rounded-xl border border-input bg-background px-4 text-sm focus:outline-none focus:ring-2 focus:ring-ring transition-smooth"
       />
     </div>

@@ -95,7 +95,10 @@
   --shadow-elegant: 0 20px 60px -20px oklch(0.28 0.06 152 / 0.35);
   --shadow-soft: 0 8px 30px -10px oklch(0.28 0.06 152 / 0.15);
   --shadow-glow: 0 0 40px oklch(0.62 0.16 142 / 0.35);
-  --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: transform 200ms cubic-bezier(0.23, 1, 0.32, 1), opacity 200ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1), border-color 200ms cubic-bezier(0.23, 1, 0.32, 1), background-color 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -147,6 +150,9 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   * {
     border-color: var(--color-border);
   }
@@ -154,14 +160,20 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Open Sans', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4 {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: 'Poppins', system-ui, sans-serif;
     letter-spacing: -0.02em;
     font-weight: 600;
+  }
+
+  button, a, [role="button"] {
+    cursor: pointer;
+    touch-action: manipulation;
   }
 }
 
@@ -175,15 +187,27 @@
   .transition-smooth { transition: var(--transition-smooth); }
   .text-balance { text-wrap: balance; }
 
+  /* Mobile safe-area for sticky bars (iPhone notches) */
+  .pb-safe { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
+
+  /* Ensure interactive cards are clearly clickable */
+  .card-interactive {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  /* Reveal animation — Emil: subtle translateY (8px not 28px), scale from 0.98 not 0,
+     strong ease-out, under 500ms, GPU-only properties */
   .reveal {
     opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(8px) scale(0.99);
+    transition: opacity 400ms cubic-bezier(0.23, 1, 0.32, 1),
+                transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
     will-change: opacity, transform;
   }
   .reveal.is-visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 
   .marquee {
@@ -218,12 +242,25 @@
     pointer-events: none;
   }
 
+  /* Emil: entries never from scale(0) — start at 0.97+opacity for natural feel */
   .animate-fade-up {
-    animation: fadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation: fadeUp 350ms cubic-bezier(0.23, 1, 0.32, 1) both;
   }
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(12px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Emil: buttons must feel responsive — scale(0.97) on :active */
+  /* Hover only on devices that support it — prevents mobile false-positive */
+  @media (hover: hover) and (pointer: fine) {
+    .btn-press:hover {
+      transform: translateY(-1px);
+    }
+  }
+  .btn-press:active {
+    transform: scale(0.97) !important;
+    transition: transform 100ms cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   @media (prefers-reduced-motion: reduce) {

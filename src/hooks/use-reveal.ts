@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export function useReveal<T extends HTMLElement = HTMLDivElement>(
-  options: IntersectionObserverInit = { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
+  options: IntersectionObserverInit = { threshold: 0.05, rootMargin: "80px 0px 0px 0px" }
 ) {
   const ref = useRef<T | null>(null);
   const [visible, setVisible] = useState(false);
