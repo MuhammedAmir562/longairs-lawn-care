@@ -1045,6 +1045,134 @@ function QuoteSection() {
   );
 }
 
+function Gallery() {
+  const [active, setActive] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (active === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActive(null);
+      if (e.key === "ArrowRight") setActive((a) => (a === null ? 0 : (a + 1) % gallery.length));
+      if (e.key === "ArrowLeft") setActive((a) => (a === null ? 0 : (a - 1 + gallery.length) % gallery.length));
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [active]);
+
+  return (
+    <section id="gallery" className="py-20 sm:py-28 bg-secondary/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <Reveal>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+            <div className="max-w-2xl">
+              <Eyebrow>Our Work</Eyebrow>
+              <h2 className="mt-3 text-3xl sm:text-5xl font-semibold text-balance">
+                Real gardens. Real transformations.
+              </h2>
+              <p className="mt-4 text-muted-foreground">
+                A glimpse of recent jobs across Ayrshire and East Renfrewshire — tap any photo to take a closer look.
+              </p>
+            </div>
+            <a
+              href="#quote"
+              className="hidden sm:inline-flex items-center gap-2 rounded-full bg-background border border-border px-5 py-3 text-sm font-medium hover:border-primary/40 hover:shadow-soft transition-smooth whitespace-nowrap"
+            >
+              Get yours quoted <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </Reveal>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 auto-rows-[180px] sm:auto-rows-[220px]">
+          {gallery.map((g, i) => (
+            <Reveal key={i} delay={i * 60}>
+              <button
+                onClick={() => setActive(i)}
+                aria-label={`View photo: ${g.caption}`}
+                className={`group relative w-full h-full overflow-hidden rounded-2xl sm:rounded-3xl shadow-soft hover:shadow-elegant transition-smooth ${g.span}`}
+              >
+                <img
+                  src={g.src}
+                  alt={g.alt}
+                  width={1024}
+                  height={1024}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-smooth duration-[1200ms]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/85 via-forest-deep/10 to-transparent opacity-80 group-hover:opacity-90 transition-smooth" />
+                <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 text-cream translate-y-1 group-hover:translate-y-0 transition-smooth">
+                  <div className="text-[11px] sm:text-xs tracking-[0.2em] uppercase text-primary-glow font-semibold">View</div>
+                  <div className="text-sm sm:text-base font-medium mt-1 text-balance">{g.caption}</div>
+                </div>
+              </button>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+
+      {active !== null && (
+        <div
+          className="fixed inset-0 z-[80] bg-forest-deep/95 backdrop-blur-md animate-fade-up"
+          onClick={() => setActive(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Photo gallery viewer"
+        >
+          <button
+            onClick={(e) => { e.stopPropagation(); setActive(null); }}
+            className="absolute top-4 right-4 z-10 grid place-items-center w-12 h-12 rounded-full bg-cream/10 text-cream hover:bg-cream/20 backdrop-blur-md transition-smooth"
+            aria-label="Close"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); setActive((a) => (a === null ? 0 : (a - 1 + gallery.length) % gallery.length)); }}
+            className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-10 grid place-items-center w-12 h-12 rounded-full bg-cream/10 text-cream hover:bg-cream/20 backdrop-blur-md transition-smooth"
+            aria-label="Previous"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); setActive((a) => (a === null ? 0 : (a + 1) % gallery.length)); }}
+            className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-10 grid place-items-center w-12 h-12 rounded-full bg-cream/10 text-cream hover:bg-cream/20 backdrop-blur-md transition-smooth"
+            aria-label="Next"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+          <div className="absolute inset-0 grid place-items-center p-4 sm:p-12" onClick={(e) => e.stopPropagation()}>
+            <figure className="max-w-5xl w-full">
+              <img
+                src={gallery[active].src}
+                alt={gallery[active].alt}
+                className="w-full max-h-[80svh] object-contain rounded-2xl shadow-elegant"
+              />
+              <figcaption className="mt-4 text-center text-cream/90 text-sm">
+                {gallery[active].caption}
+                <span className="text-cream/50 ml-2">· {active + 1} / {gallery.length}</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function GoogleG({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
+      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/>
+      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 16 18.9 13 24 13c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.4 6.3 14.7z"/>
+      <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2c-2 1.5-4.6 2.4-7.2 2.4-5.2 0-9.7-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/>
+      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.6l6.2 5.2C41.4 35.3 44 30.1 44 24c0-1.3-.1-2.4-.4-3.5z"/>
+    </svg>
+  );
+}
+
 function Footer() {
   return (
     <footer className="bg-background border-t border-border py-12">
